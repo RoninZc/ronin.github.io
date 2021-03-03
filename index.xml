@@ -7,14 +7,168 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-hans</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Wed, 03 Mar 2021 13:40:25 +0800</lastBuildDate><atom:link href="https://roninzc.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 03 Mar 2021 16:36:09 +0800</lastBuildDate><atom:link href="https://roninzc.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>First</title>
-      <link>https://roninzc.github.io/posts/first/</link>
+      <title>LeetCode 338:比特位计数</title>
+      <link>https://roninzc.github.io/posts/%E7%AE%97%E6%B3%95/leetcode/leetcode-338%E6%AF%94%E7%89%B9%E4%BD%8D%E8%AE%A1%E6%95%B0/</link>
+      <pubDate>Wed, 03 Mar 2021 16:36:09 +0800</pubDate>
+      
+      <guid>https://roninzc.github.io/posts/%E7%AE%97%E6%B3%95/leetcode/leetcode-338%E6%AF%94%E7%89%B9%E4%BD%8D%E8%AE%A1%E6%95%B0/</guid>
+      <description>题目 给定一个非负整数 num。对于 0 ≤ i ≤ num 范围中的每个数字 i ，计算其二进制数中的 1 的数目并将它们作为数组返回
+示例1:
+ 输入: 2 输出: [0, 1, 1]
+ 示例2:
+ 输入: 5 输出: [0, 1, 1, 2, 1, 2]
+ 进阶:
+ 给出时间复杂度为 O(n * sizeof(integer)) 的解答非常容易. 但你可以在线性时间 O(n) 内用一趟扫描做到吗? 要求算法的空间复杂度为 O(n) 你能进一步完善解法吗？要求在C++或任何其他语言中不使用任何内置函数（如 C++ 中的 __builtin_popcount）来执行此操作  开始的思路 先不考虑进阶, 使用语言自带的函数进行解答，Golang中可以使用bits.OnesCount()函数来计算
+func countBits(num int) []int { nums := make([]int, num+1) for i := 0; i &amp;lt;= num; i++ { nums[i] = bits.</description>
+    </item>
+    
+    <item>
+      <title>Golang标准库限流器timerate使用介绍</title>
+      <link>https://roninzc.github.io/posts/golang/%E6%A0%87%E5%87%86%E5%BA%93/golang%E6%A0%87%E5%87%86%E5%BA%93%E9%99%90%E6%B5%81%E5%99%A8timerate%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/</link>
+      <pubDate>Wed, 03 Mar 2021 16:21:52 +0800</pubDate>
+      
+      <guid>https://roninzc.github.io/posts/golang/%E6%A0%87%E5%87%86%E5%BA%93/golang%E6%A0%87%E5%87%86%E5%BA%93%E9%99%90%E6%B5%81%E5%99%A8timerate%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/</guid>
+      <description>本主题为系列文章，分上下两篇。本文主要介绍 time/rate 的具体使用方法，另外一篇文章 《Golang 限流器 time/rate 实现剖析》 则着重介绍其内部实现原理。
+ 限流器是后台服务中的非常重要的组件，可以用来限制请求速率，保护服务，以免服务过载。 限流器的实现方法有很多种，例如滑动窗口法、Token Bucket、Leaky Bucket 等。
+其实 Golang 标准库中就自带了限流算法的实现，即 golang.org/x/time/rate。该限流器是基于 Token Bucket(令牌桶) 实现的。
+简单来说，令牌桶就是想象有一个固定大小的桶，系统会以恒定速率向桶中放 Token，桶满则暂时不放。 而用户则从桶中取 Token，如果有剩余 Token 就可以一直取。如果没有剩余 Token，则需要等到系统中被放置了 Token 才行。
+本文则主要集中介绍下该组件的具体使用方法：
+构造一个限流器 我们可以使用以下方法构造一个限流器对象：
+limiter := NewLimiter(10, 1); 这里有两个参数：
+ 第一个参数是 r Limit。代表每秒可以向 Token 桶中产生多少 token。Limit 实际上是 float64 的别名。 第二个参数是 b int。b 代表 Token 桶的容量大小。  那么，对于以上例子来说，其构造出的限流器含义为，其令牌桶大小为 1, 以每秒 10 个 Token 的速率向桶中放置 Token。
+除了直接指定每秒产生的 Token 个数外，还可以用 Every 方法来指定向 Token 桶中放置 Token 的间隔，例如：</description>
+    </item>
+    
+    <item>
+      <title>Golang标准库限流器timerate实现剖析</title>
+      <link>https://roninzc.github.io/posts/golang/%E6%A0%87%E5%87%86%E5%BA%93/golang%E6%A0%87%E5%87%86%E5%BA%93%E9%99%90%E6%B5%81%E5%99%A8timerate%E5%AE%9E%E7%8E%B0%E5%89%96%E6%9E%90/</link>
+      <pubDate>Wed, 03 Mar 2021 16:14:05 +0800</pubDate>
+      
+      <guid>https://roninzc.github.io/posts/golang/%E6%A0%87%E5%87%86%E5%BA%93/golang%E6%A0%87%E5%87%86%E5%BA%93%E9%99%90%E6%B5%81%E5%99%A8timerate%E5%AE%9E%E7%8E%B0%E5%89%96%E6%9E%90/</guid>
+      <description>限流器是微服务中必不缺少的一环，可以起到保护下游服务，防止服务过载等作用。上一篇文章 《Golang 限流器 time/rate 使用介绍》 简单介绍了 time/rate 的使用方法，本文则着重分析下其实现原理。建议在正式阅读本文之前，先阅读下上一篇文章。
+上一篇文章讲到，time/rate 是基于 Token Bucket(令牌桶) 算法实现的限流。本文将会基于源码，深入剖析下 Golang 是如何实现 Token Bucket 的。其代码也非常简洁，去除注释后，也就 200 行左右的代码量。
+同时，我也提供了 time/rate 注释版，辅助大家理解该组件的实现。
+背景 简单来说，令牌桶就是想象有一个固定大小的桶，系统会以恒定速率向桶中放 Token，桶满则暂时不放。 而用户则从桶中取 Token，如果有剩余 Token 就可以一直取。如果没有剩余 Token，则需要等到系统中被放置了 Token 才行。
+一般介绍 Token Bucket 的时候，都会有一张这样的原理图： 从这个图中看起来，似乎令牌桶实现应该是这样的：
+ 有一个 Timer 和一个 BlockingQueue。Timer 固定的往 BlockingQueue 中放 token。用户则从 BlockingQueue 中取数据。
+ 这固然是 Token Bucket 的一种实现方式，这么做也非常直观，但是效率太低了：我们需要不仅多维护一个 Timer 和 BlockingQueue，而且还耗费了一些不必要的内存。
+在 Golang 的 timer/rate 中的实现, 并没有单独维护一个 Timer，而是采用了 lazyload 的方式，直到每次消费之前才根据时间差更新 Token 数目，而且也不是用 BlockingQueue 来存放 Token，而是仅仅通过计数的方式。</description>
+    </item>
+    
+    <item>
+      <title>RSA(七) X.509 自签名证书</title>
+      <link>https://roninzc.github.io/posts/rsa/rsa%E4%B8%83-x.509-%E8%87%AA%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6/</link>
+      <pubDate>Wed, 03 Mar 2021 13:47:25 +0800</pubDate>
+      
+      <guid>https://roninzc.github.io/posts/rsa/rsa%E4%B8%83-x.509-%E8%87%AA%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6/</guid>
+      <description>前言 继前文RSA(六) X.509 CA 证书 所述，X.509 CA 证书是由 𝐶𝐴CA 认证中心签名并颁发的；但是最后，作者留下了这么一个疑问，就是如果在企业内网，我同样需要对公钥进行认证，但是因为不需要连接外网，所以并不需要 𝐶𝐴CA 证书(因为，𝐶𝐴CA 证书毕竟开销不菲)；那么是否有这样的一种可替代的方案，在不使用 𝐶𝐴CA 证书的前提下，能否保证公钥的合法性？答案是自签名证书；
+备注，本文是作者的原创作品，转载请注明出处。
+ 转载至https://www.shangyang.me/2017/05/27/encrypt-rsa-selfsigned-certificate/
+ 定义 看下 wikipedia https://en.wikipedia.org/wiki/Self-signed_certificate 上的最重要的一段解释
+ In technical terms a self-signed certificate is one signed with its own private key.
+ 自签名证书说穿了，就是一个由自己的私钥进行签名的证书；
+与 CA 证书的区别 通过 RSA(六) X.509 CA 证书 章节我们知道，要保证公钥的合法性，我们需要把自己的公钥交给第三方 𝐶𝐴CA 机构，通过它的私钥来进行签名，并生成一张 𝐶𝐴CA 证书并颁发给用户；而与 𝐶𝐴CA 证书相对应的就是自签名证书，也就是说，我自己的公钥不交给第三方的 𝐶𝐴CA 机构进行签名，而是直接由自己的私钥进行签名，并生成一张自签名的证书；
+如何生成 这里我主要讲解一下，如果通过 openssl 来生成自签名的证书，
+$ openssl req \ &amp;gt; -newkey rsa:2048 -nodes -keyout private.</description>
+    </item>
+    
+    <item>
+      <title>RSA(六) X.509 CA 证书</title>
+      <link>https://roninzc.github.io/posts/rsa/rsa%E5%85%AD-x.509-ca-%E8%AF%81%E4%B9%A6/</link>
+      <pubDate>Wed, 03 Mar 2021 13:46:25 +0800</pubDate>
+      
+      <guid>https://roninzc.github.io/posts/rsa/rsa%E5%85%AD-x.509-ca-%E8%AF%81%E4%B9%A6/</guid>
+      <description>前言 由前文 RSA(五) PKI (Public Key Infrastructure) 公钥基础设施可知，CA 证书授权中心颁发给用户的是一张 X.509 证书；本篇文章，博主将带领大家一探 X.509 证书的究竟；
+重要：本文为作者的原创作品，转载需注明出处；
+ 转载至https://www.shangyang.me/2017/05/27/encrypt-rsa-selfsigned-certificate/
+ 通过 CSR 申请 X509 CA 证书 这里大致讲解如何申请 X.509 CA 证书的流程，
+ 用户先在本地通过 RSA 生成一对公钥 𝐾𝑝Kp 和密钥 𝐾𝑠Ks， 然后，用户在本地生成一张 𝐶𝑆𝑅CSR 证书，既 Certificate Signing Request  需要填写诸如你的域名，公司名，部门名称，城市名，地区名，国家名，电子邮件等等证明你身份的信息， 添加用户公钥 𝐾𝑝 将上述信息通过 𝐾𝑠 进行签名得到 𝑆𝑐𝑠𝑟 将上述的签名 𝑆𝑐𝑠𝑟、𝐾𝑝 以及身份信息合并成为一张 𝐶𝑆𝑅 证书 ; TODO: 需要合并 𝑆𝑐𝑠𝑟 吗？这个还需要进一步求证……   申请者通过向 CA 中心或者 RA 中心提交 𝐶𝑆𝑅 证书，申请 X.509 证书； 𝐶𝐴 中心用它的密钥 𝐾𝑠(𝑐𝑎)Ks(ca) 对用户提交的 𝐶𝑆𝑅 证书进行签名，将签名和 𝐶𝑆𝑅 合并生成一张 X.</description>
+    </item>
+    
+    <item>
+      <title>RSA(五) PKI (Public Key Infrastructure) 公钥基础设施</title>
+      <link>https://roninzc.github.io/posts/rsa/rsa%E4%BA%94-pki-public-key-infrastructure-%E5%85%AC%E9%92%A5%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/</link>
+      <pubDate>Wed, 03 Mar 2021 13:45:25 +0800</pubDate>
+      
+      <guid>https://roninzc.github.io/posts/rsa/rsa%E4%BA%94-pki-public-key-infrastructure-%E5%85%AC%E9%92%A5%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/</guid>
+      <description>前言 在上一篇《RSA(四) 签名 Signature》章节签名 Signature 中提到，要使用签名(Signature)机制来保证信息再传递过程中没有被第三方所篡改，有一个前提，就是必须保证，在公钥的传递过程中不被他人篡改，否则，整个签名机制就形同一张白纸，毫无用处；那么又该如何保证公钥的合法性，保证公钥本身没有被篡改过呢？这就是 PKI 公钥基础设施要完成的工作和达到的目的；
+备注，本文是作者的原创作品，转载请注明出处。
+ 转载至https://www.shangyang.me/2017/05/25/encrypt-rsa-pki/
+ 公钥被篡改 首先，我们来看看，在通讯过程中，公钥是如何被他人所篡改的？也就是 Man in Middle Attack 是怎么做到的？
+先来看一个正常的，通过公钥和私钥加密通讯的场景，
+服务器端生成公钥和私钥，并将公钥通过网络发送给客户端，客户端使用公钥加密 DES 对称加密密钥，然后将 DES 密钥发送给服务器端，之后，双方便可以进行加密通讯了；备注，这也是基于 RSA 加密通讯的基础；但是，这样做，并不可靠，下面我们再来看一个公钥被挟持并被篡改的场景；
+这次通讯的时候，不幸的是，客户端与服务器通讯的时候，正好经过了一个黑客的路由器，通过网络嗅探，它截获了服务器所发送的公钥，并利用自己的私钥，生成了一个新的公钥，并替代原有的公钥并将这个新的公钥发送给了客户端，这个过程就是公钥被截获，被篡改的过程；而后，客户端将使用被篡改过后的公钥进行加密通讯，所以，凡是经过客户端加密的信息，全部可以被黑客的私钥解密，也就导致了，加密通讯彻底失效；正是在这种背景之下，PKI (Public Key Infrasture) 公钥基础设施孕育而生；
+后记，发现还漏了一环，首先要知道的是，当通过 RSA 建立好 SSL 通讯通道以后，实际上，为了效率，该通道上数据实际上是通过对称加密密钥 AES 进行加密传输的，所以，能否保证数据通讯的安全性的重中之重的环节就是保证 AES 密钥在传输过程中的安全性，正如上图所描述的那样，当黑客截获到加密后的 AES 密钥以后，首先需要通过黑客自己的私钥对其解密，然后再通过黑客所截获的服务器的公钥对该 AES 密钥进行加密，然后再传输给服务器端，如果不这样做的话，服务器是无法通过它自己的私钥解密出 AES 密钥的；（后记于 2018-01-30 10:45AM）
+PKI PKI 的核心职责就是通过一些列的措施保证公钥的合法性，那么它是如何保证公钥不被篡改，是合法的呢？
+如何保证公钥不被篡改的 比如 Alice 通过 RSA 生成了公钥 𝐾𝑝Kp 和密钥 𝐾𝑠Ks，她需要与 Bob 进行网络通讯，而且她必须通过网络将公钥 𝐾𝑝Kp 发送给 Bob；那么 PKI 是如何保证此公钥 𝐾𝑝Kp 在传输过程中不被篡改的呢？</description>
+    </item>
+    
+    <item>
+      <title>RSA(四) 签名 Signature</title>
+      <link>https://roninzc.github.io/posts/rsa/rsa%E5%9B%9B-%E7%AD%BE%E5%90%8D-signature/</link>
+      <pubDate>Wed, 03 Mar 2021 13:44:25 +0800</pubDate>
+      
+      <guid>https://roninzc.github.io/posts/rsa/rsa%E5%9B%9B-%E7%AD%BE%E5%90%8D-signature/</guid>
+      <description>前言 由RSA(一) 背后的数学原理可知，RSA 既公钥加密技术主要是通过私钥加密信息，然后由公钥来解密信息；但是，从 RSA 的数学原理中我们可以知道，其实私钥加密信息，然后用公钥来解密也是可以的；而因为公钥是公开的，私钥加密的东西谁都可以进行解密，那这样做有什么意义呢？本章节就是来探讨这样做的意义何在？一句话概括，它的意义就在于签名( sign )；
+备注，本文是作者的原创作品，转载请注明出处。
+ 转载至https://www.shangyang.me/2017/05/24/encrypt-rsa-signature/
+ 场景 来看这样一个场景，Bob 给股票经纪人 Alice 发送了一封邮件，让 Alice 帮他大量购买某支股票；可是刚买不久，股票就大跌，于是 Bob 转而否认发过那封邮件，声称那封邮件是伪造的；那么作为法官的你，如何来验证之前发送的那封邮件到底是不是 Bob 发送的呢？
+要解决上述场景的问题，就需要使用到 RSA 签名技术了；
+签名 Signature 为保证邮件是 Bob 发送的，在邮件收发协议上做了如下的操作约定，
+ 首先双方通过邮件协议约定好签名的算法，比如都是用 MD5 或者是其它签名算法。 Bob 在发送邮件的同时，邮件系统将做如下的操作  通过签名算法 MD5 将邮件内容c进行 hash，得到邮件内容的签名(Sign)，记为 𝑆1； 通过 Bob 的私钥 𝑃 对 𝑆1 进行加密，得到加密后邮件内容的签名(Encrypted Sign)，记为 𝑆1𝑒； 最后，Bob 通过邮箱系统将签名 𝑆1𝑒S1e，邮件内容c，以及 Bob 的公钥 𝑃 三部分内容发送给 Alice； 如何保证公钥的安全性和可靠性，不在本文涉及；   Alice 收到 Bob 的邮件以后，邮箱系统会做如下的操作  使用 Bob 的公钥对 𝑆1𝑒 进行解密，得到 𝑆1； 使用双方事先约定好的签名算法 MD5 对c进行 hash 得到签名 𝑆2； 比较签名 𝑆1 和签名 𝑆2 是否相等 如果相等，则表示邮件内容没有被篡改； 如果不相等，则表示邮件内容被他人篡改；    不过，要保证信息的确没有被篡改，还有一条基本原则，就是 Bob 的公钥 𝑃 不能被篡改，如果公钥 𝑃 在 Bob 发送给 Alice 的过程被人篡改了，那么 Attacker 就可以自己杜撰一封邮件，并通过自己的私钥签名邮件，并将自己篡改后的公钥 𝑃𝑐Pc 一同发送给 Alice，那么这个时候，Alice 是没有办法确认邮件是否是被篡改过的；所以，用 RSA 签名的方式来保证信息没有被篡改过，一个基本的前提就是 Bob 的公钥 𝑃P 不能被第三方篡改；而要保证公钥不能被第三方篡改，就需要 PKI (Public Key Infrasture) 公钥基础设施来保证公钥的合法性，涉及到 CA，Root Certificate 根证书相关知识；这部分知识不打算在本文进行描述；相关内容参考 RSA(五) PKI (Public Key Infrastructure) 公钥基础设施；</description>
+    </item>
+    
+    <item>
+      <title>RSA(三) 密钥的格式</title>
+      <link>https://roninzc.github.io/posts/rsa/rsa%E4%B8%89-%E5%AF%86%E9%92%A5%E7%9A%84%E6%A0%BC%E5%BC%8F/</link>
+      <pubDate>Wed, 03 Mar 2021 13:43:25 +0800</pubDate>
+      
+      <guid>https://roninzc.github.io/posts/rsa/rsa%E4%B8%89-%E5%AF%86%E9%92%A5%E7%9A%84%E6%A0%BC%E5%BC%8F/</guid>
+      <description>前言 本篇博文重点描述密钥的种种格式；
+备注，本文是作者的原创作品，转载请注明出处。
+ 转载至https://www.shangyang.me/2017/05/24/encrypt-rsa-keyformat/
+ PEM 和 DER 首先我们来看看什么是 PEM 和 DER
+什么是 DER 格式 DER 是密钥的二进制表述格式；
+http://fileformats.archiveteam.org/wiki/DER
+ Distinguished Encoding Rules (DER) is a binary serialization of ASN.1 format. It is often used for cryptographic data such as certificates, but has other uses.
+ 很明显，DER 就是 ASN.1 的二进制格式；
+什么是 PEM 格式 PEM 格式既是对 DER 编码转码为 Base64 字符格式；通过解码，将会还原为 DER 格式；
+http://fileformats.archiveteam.org/wiki/PEM
+ A PEM file is plain text. It contain one or more objects, such as certificates or keys, which may not all be the same type.</description>
+    </item>
+    
+    <item>
+      <title>RSA(二) PKCS 公钥加密标准系列</title>
+      <link>https://roninzc.github.io/posts/rsa/rsa%E4%BA%8C-pkcs-%E5%85%AC%E9%92%A5%E5%8A%A0%E5%AF%86%E6%A0%87%E5%87%86%E7%B3%BB%E5%88%97/</link>
+      <pubDate>Wed, 03 Mar 2021 13:41:25 +0800</pubDate>
+      
+      <guid>https://roninzc.github.io/posts/rsa/rsa%E4%BA%8C-pkcs-%E5%85%AC%E9%92%A5%E5%8A%A0%E5%AF%86%E6%A0%87%E5%87%86%E7%B3%BB%E5%88%97/</guid>
+      <description>前言 本章着重描述 RSA PCKS(Public-Key Cryptography Standards Series 公钥加密标准系列)，RSA 又称为公钥加密技术，主要的使用场景是公钥加密、私钥解密（补充，当然，私钥加密，公钥机密也是可行的，但是这样做并不安全，因为公钥是公开的，所有拿到公钥的人都可以解密，也就失去了加密的本质；不过，可以用私钥来进行签名，后续有专门的博文对此进行描述）；
+为了定义 RSA 加密的标准系列，IETF 组织总共定义了 15 个子系列标准，分别用在定义标准格式、如何封装、公钥加密封装标准、私钥加密封装标准、网络传输序列化标准等等.. 具体可以参考 wikipedia PCKS 的解释: https://en.wikipedia.org/wiki/PKCS；
+下面我就几个核心的系列标准进行描述，
+重要：本文为作者的原创作品，转载需注明出处；
+ 转载至https://www.shangyang.me/2017/05/24/encrypt-rsa-keyformat/
+ 未完待续….
+PKCS #1 RSA Cryptography Standard 摘要 wikepedia 中的一段摘要，
+ See RFC 3447. Defines the mathematical properties and format of RSA public and private keys (ASN.1-encoded in clear-text), and the basic algorithms and encoding/padding schemes for performing RSA encryption, decryption, and producing and verifying signatures.</description>
+    </item>
+    
+    <item>
+      <title>RSA(一) 背后的数学原理</title>
+      <link>https://roninzc.github.io/posts/rsa/rsa%E4%B8%80-%E8%83%8C%E5%90%8E%E7%9A%84%E6%95%B0%E5%AD%A6%E5%8E%9F%E7%90%86/</link>
       <pubDate>Wed, 03 Mar 2021 13:40:25 +0800</pubDate>
       
-      <guid>https://roninzc.github.io/posts/first/</guid>
-      <description>Hello Hugo </description>
+      <guid>https://roninzc.github.io/posts/rsa/rsa%E4%B8%80-%E8%83%8C%E5%90%8E%E7%9A%84%E6%95%B0%E5%AD%A6%E5%8E%9F%E7%90%86/</guid>
+      <description>前言 本篇文章将试图从数学原理上理清 RSA 的加密解密的原理；并写一个简单的加密解密的用例来使用；
+备注，本文是作者的原创作品，转载请注明出处。
+ 转载至https://www.shangyang.me/2017/05/24/encrypt-rsa-keyformat/
+ 数论相关 模 N 随机选择两个大的质数 p 和 q，p 不等于 q, 计算得到 𝑁=𝑝𝑞N=pq
+欧拉函数的值 r = 𝜑(pq) 𝑟=𝜑(𝑝𝑞)=𝜑(𝑝)𝜑(𝑞)=(𝑝−1)(𝑞−1)r=𝜑(pq)=𝜑(p)𝜑(q)=(p−1)(q−1)
+欧拉函数值求的是有多少个小于 N 的数与 N 互质，如果 N 本身为质数，那么就有 N-1 个数与 N 互质；
+随机数 e 选择一个整数 e 且 1&amp;lt;𝑒&amp;lt;𝑟1&amp;lt;e&amp;lt;r，使得 e 与 r 互质(两个数的公约数为 1)；取 e 的目的是为了求得 e 关于 r 的模反元素 d；
+模反元素 d 什么是模反元素 d 由e小节可知，模反元素 d 是 e 关于 r 的模反元素且若模反元素 d 存在，当且仅当 e 与 r 互质；</description>
     </item>
     
   </channel>

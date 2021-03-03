@@ -6,17 +6,1690 @@
 		<generator>Hugo -- gohugo.io</generator>
 		<language>zh-hans</language>
 		<copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-		<lastBuildDate>Wed, 03 Mar 2021 13:40:25 +0800</lastBuildDate>
+		<lastBuildDate>Wed, 03 Mar 2021 16:36:09 +0800</lastBuildDate>
 		<atom:link href="https://roninzc.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
 		
 		<item>
-			<title>First</title>
-			<link>https://roninzc.github.io/posts/first/</link>
+			<title>LeetCode 338:比特位计数</title>
+			<link>https://roninzc.github.io/posts/%E7%AE%97%E6%B3%95/leetcode/leetcode-338%E6%AF%94%E7%89%B9%E4%BD%8D%E8%AE%A1%E6%95%B0/</link>
+			<pubDate>Wed, 03 Mar 2021 16:36:09 +0800</pubDate>
+			
+			<guid>https://roninzc.github.io/posts/%E7%AE%97%E6%B3%95/leetcode/leetcode-338%E6%AF%94%E7%89%B9%E4%BD%8D%E8%AE%A1%E6%95%B0/</guid>
+			<description>题目 给定一个非负整数 num。对于 0 ≤ i ≤ num 范围中的每个数字 i ，计算其二进制数中的 1 的数目并将它们作为数组返回
+示例1:
+ 输入: 2 输出: [0, 1, 1]
+ 示例2:
+ 输入: 5 输出: [0, 1, 1, 2, 1, 2]
+ 进阶:
+ 给出时间复杂度为 O(n * sizeof(integer)) 的解答非常容易. 但你可以在线性时间 O(n) 内用一趟扫描做到吗? 要求算法的空间复杂度为 O(n) 你能进一步完善解法吗？要求在C++或任何其他语言中不使用任何内置函数（如 C++ 中的 __builtin_popcount）来执行此操作  开始的思路 先不考虑进阶, 使用语言自带的函数进行解答，Golang中可以使用bits.OnesCount()函数来计算
+func countBits(num int) []int { nums := make([]int, num+1) for i := 0; i &amp;lt;= num; i++ { nums[i] = bits.</description>
+			<content type="html"><![CDATA[<h3 id="题目">题目</h3>
+<p>给定一个非负整数 <strong>num</strong>。对于 <strong>0 ≤ i ≤ num</strong> 范围中的每个数字 <strong>i</strong> ，计算其二进制数中的 1 的数目并将它们作为数组返回</p>
+<p>示例1:</p>
+<blockquote>
+<p>输入: 2
+输出: [0, 1, 1]</p>
+</blockquote>
+<p>示例2:</p>
+<blockquote>
+<p>输入: 5
+输出: [0, 1, 1, 2, 1, 2]</p>
+</blockquote>
+<p>进阶:</p>
+<ul>
+<li>给出时间复杂度为 O(n * sizeof(integer)) 的解答非常容易. 但你可以在线性时间 O(n) 内用一趟扫描做到吗?</li>
+<li>要求算法的空间复杂度为 O(n)</li>
+<li>你能进一步完善解法吗？要求在C++或任何其他语言中不使用任何内置函数（如 C++ 中的 <strong>__builtin_popcount</strong>）来执行此操作</li>
+</ul>
+<h3 id="开始的思路">开始的思路</h3>
+<p>先不考虑进阶, 使用语言自带的函数进行解答，Golang中可以使用<code>bits.OnesCount()</code>函数来计算</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">countBits</span><span class="p">(</span><span class="nx">num</span> <span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
+	<span class="nx">nums</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="nx">num</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="nx">num</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="nx">nums</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="p">=</span> <span class="nx">bits</span><span class="p">.</span><span class="nf">OnesCount</span><span class="p">(</span><span class="nb">uint</span><span class="p">(</span><span class="nx">i</span><span class="p">))</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="nx">nums</span>
+<span class="p">}</span>
+</code></pre></div><p>这种解答十分简单，我们来尝试一下手写一个 OneCount()</p>
+<p>leetcode 官方解答内提到有一个位运算的小技巧</p>
+<blockquote>
+<p>对于任意整数x, 令 x = x &amp; (x - 1) , 该运算将 x 的二进制表示的最后一个1变成0. 因此, 对x重复该操作, 直到x变成0, 则操作次数即为x的「一比特数」</p>
+</blockquote>
+<p>我们来实际操作一下试试</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 8的二进制为 1000
+</span><span class="c1">// 7的二进制为 0111
+</span><span class="c1">// 我们进行 &amp; 操作
+</span><span class="c1"></span><span class="mi">1000</span> <span class="o">&amp;</span> <span class="mo">0111</span> <span class="p">=</span> <span class="mo">0000</span> 
+<span class="c1">// x 变成了 0 , 8的二进制数为1, 这符合我们的答案
+</span><span class="c1">// 让我们再来一个
+</span><span class="c1">// 6的二进制为 0110
+</span><span class="c1">// 5的二进制为 0101
+</span><span class="c1">// 4的二进制为 0100
+</span><span class="c1">// 3的二进制为 0011
+</span><span class="c1"></span><span class="mo">0111</span> <span class="o">&amp;</span> <span class="mo">0110</span> <span class="p">=</span> <span class="mo">0110</span> <span class="c1">// ones + 1
+</span><span class="c1"></span><span class="mo">0110</span> <span class="o">&amp;</span> <span class="mo">0101</span> <span class="p">=</span> <span class="mo">0100</span> <span class="c1">// ones + 1
+</span><span class="c1"></span><span class="mo">0101</span> <span class="o">&amp;</span> <span class="mo">0100</span> <span class="p">=</span> <span class="mo">0100</span> <span class="c1">// ones + 1
+</span><span class="c1"></span><span class="mo">0100</span> <span class="o">&amp;</span> <span class="mo">0011</span> <span class="p">=</span> <span class="mo">0000</span> <span class="c1">// ones = 3 
+</span><span class="c1">// 对此我只能发出咸鱼的声音，妙啊
+</span></code></pre></div><p>对此技巧，我们可以写出:</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">onesCount</span><span class="p">(</span><span class="nx">x</span> <span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="nx">ones</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">for</span> <span class="p">;</span> <span class="nx">x</span> <span class="p">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">x</span> <span class="o">&amp;=</span> <span class="nx">x</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">{</span>
+		<span class="nx">ones</span><span class="o">++</span>
+	<span class="p">}</span>
+	<span class="k">return</span>
+<span class="p">}</span>
+</code></pre></div><p>但是这依然不满足进阶解答的需求，所以我们继续</p>
+<h3 id="进阶">进阶</h3>
+<p>要给出时间复杂度为 O(n) 的解法, 代表我们不能使用系统的内置函数, 且不能进入循环. 我们必须进行逻辑梳理</p>
+<p>官方给出的解答: 动态规划&ndash;最高有效位 有些晦涩难懂</p>
+<blockquote>
+<p>需要对每个数遍历其二进制表示的每一位。可以换一个思路，当计算 i 的「一比特数」时，如果存在 0 ≤ j &lt; i，j 的「一比特数」已知，且 i 和 j 相比，i 的二进制表示只多了一个 1，则可以快速得到 i 的「一比特数」。</p>
+<p>令 bits[i] 表示 i 的「一比特数」，则上述关系可以表示成：bits[i] = bits[j] + 1。</p>
+<p>对于正整数 x，如果可以知道最大的正整数 y，使得 y ≤ x 且 y 是 2 的整数次幂，则 y 的二进制表示中只有最高位是 1，其余都是 0，此时称 y 为 x 的「最高有效位」。令 z = x − y，显然 0 ≤ z &lt; x，则 bits[x] = bits[z] + 1。</p>
+<p>为了判断一个正整数是不是 2 的整数次幂，可以利用方法一中提到的按位与运算的性质。如果正整数 y 是 2 的整数次幂，则 y 的二进制表示中只有最高位是 1，其余都是 0，因此 y &amp; ( y − 1 ) = 0。由此可见，正整数 y 是 2 的整数次幂，当且仅当 y &amp; ( y − 1 ) = 0。</p>
+<p>显然，0 的「一比特数」为 0。使用 highBit 表示当前的最高有效位，遍历从 1 到 num 的每个正整数 i，进行如下操作。</p>
+<p>如果 i&amp;(i−1)=0，则令 highBit = i，更新当前的最高有效位。</p>
+<p>i 比 i−highBit 的「一比特数」多 1，由于是从小到大遍历每个数，因此遍历到 i 时，i−highBit 的「一比特数」已知，令 bits[i] = bits[i−highBit] + 1。</p>
+<p>最终得到的数组 bits 即为答案。</p>
+<p>作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/counting-bits/solution/bi-te-wei-ji-shu-by-leetcode-solution-0t1i/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+</blockquote>
+<p>我这尝试做出自己的解释：</p>
+<ul>
+<li>当一个数是 2 的整数次幂时, 它的二进制中1的数量只会是1</li>
+<li>当一个数不是2的整数次幂时，它的二进制中1的数量为 <em><strong>(它 与 它上次为2的整数次幂的数的差值)的「一比特数」+ 1</strong></em></li>
+</ul>
+<p>我们可以来实际试试:</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 8的二进制为 1000 它是2的整数次幂 所以它的二进制中1的数量只会是1
+</span><span class="c1">// 那 9 呢？根据上面的总结 它的上次2的整数次幂的数为 8,9-8=1(0001) 的「一比特数」为1
+</span><span class="c1">// 9 的二进制位是 1001 ,「一比特数」为 2, 完美
+</span><span class="c1">// 那 10 呢？它的上次2的整数次幂的数依然为 8, 10-8=2(0010) 的「一比特数」为1
+</span><span class="c1">// 10 的二进制位为 1010, 「一比特数」为 2
+</span><span class="c1">// 继续 11 二进制为 1011, 11-8=3 , 3(0011)的「一比特数」为2 
+</span><span class="c1">// 对此我只能发出咸鱼的声音，妙啊
+</span><span class="c1"></span>
+<span class="c1">// 所以我们能写出下面的方法
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">countBits</span><span class="p">(</span><span class="nx">num</span> <span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
+	<span class="nx">bits</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="nx">num</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+	<span class="nx">highBit</span> <span class="o">:=</span> <span class="mi">0</span> <span class="c1">// 最高比特位 即 上次为2的整数次幂的数
+</span><span class="c1"></span>  <span class="c1">// 0的「一比特数」为 0，不需要进入循环
+</span><span class="c1"></span>	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="nx">num</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="c1">// 这里是根据上面的位运算的技巧，判断是否为2的整数次幂，因为2的整数次幂只有一个1
+</span><span class="c1"></span>  	<span class="k">if</span> <span class="nx">i</span><span class="o">&amp;</span><span class="p">(</span><span class="nx">i</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
+			<span class="nx">highBit</span> <span class="p">=</span> <span class="nx">i</span> <span class="c1">// 更新最高比特位
+</span><span class="c1"></span>		<span class="p">}</span>
+		<span class="c1">// 它与它上次为2的整数次幂的数的差值 的「一比特数」+ 1
+</span><span class="c1"></span>		<span class="nx">bits</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="p">=</span> <span class="nx">bits</span><span class="p">[</span><span class="nx">i</span><span class="o">-</span><span class="nx">highBit</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="nx">bits</span>
+<span class="p">}</span>
+</code></pre></div><p>应该还是有些晦涩难懂，但是我也没得办法，这太抽象了，官方解答的其他动态规划思想就不继续了，我们还有新办法。</p>
+<h3 id="新的办法">新的办法</h3>
+<p>对于所有的数字，只有两类 奇数|偶数:</p>
+<ol>
+<li>
+<p>奇数: 在二进制中表示，奇数一定比前面的那个偶数多一个1，多的就是最低位的1</p>
+<blockquote>
+<p>举例：</p>
+<p>0 = 0000    1 = 0001</p>
+<p>2 = 0010    3 = 0011</p>
+</blockquote>
+<p>发现了没有，偶数的最低位总是0，奇数的最低位总是1，我们再考虑偶数</p>
+</li>
+<li>
+<p>偶数: 二进制中，偶数中的1一定和除以2之后的那个数一样多，因为偶数的最低位总是0</p>
+<p>除以2就只是右移一位，把最低位的0去掉而已，所以1的数量是不变的</p>
+<blockquote>
+<p>举例:</p>
+<p>0 = 0000    1 = 0001 // 0不算, 1的「一比特数」= 0 + 1</p>
+<p>2 = 0010    3 = 0011 // 2 / 2 = 1, 1的「一比特数」= 1 &hellip;</p>
+<p>4 = 0100    5 = 0101</p>
+<p>6 = 0110    7 = 0111</p>
+</blockquote>
+</li>
+</ol>
+<p>我们能根据上面的规律来写出以下代码</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">countBits</span><span class="p">(</span><span class="nx">num</span> <span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
+	<span class="nx">nums</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="nx">num</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="nx">num</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+    <span class="c1">// 判断是否为偶数，奇数的最后一位永远是1
+</span><span class="c1"></span>		<span class="k">if</span> <span class="nx">i</span><span class="o">&amp;</span><span class="mi">1</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">{</span>
+			<span class="nx">nums</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="p">=</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+			<span class="nx">nums</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="p">=</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">i</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="nx">nums</span>
+<span class="p">}</span>
+</code></pre></div><blockquote>
+<p>以上思路来自:</p>
+<p>作者：duadua
+链接：https://leetcode-cn.com/problems/counting-bits/solution/hen-qing-xi-de-si-lu-by-duadua/
+来源：力扣（LeetCode）</p>
+</blockquote>
+]]></content>
+		</item>
+		
+		<item>
+			<title>Golang标准库限流器timerate使用介绍</title>
+			<link>https://roninzc.github.io/posts/golang/%E6%A0%87%E5%87%86%E5%BA%93/golang%E6%A0%87%E5%87%86%E5%BA%93%E9%99%90%E6%B5%81%E5%99%A8timerate%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/</link>
+			<pubDate>Wed, 03 Mar 2021 16:21:52 +0800</pubDate>
+			
+			<guid>https://roninzc.github.io/posts/golang/%E6%A0%87%E5%87%86%E5%BA%93/golang%E6%A0%87%E5%87%86%E5%BA%93%E9%99%90%E6%B5%81%E5%99%A8timerate%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/</guid>
+			<description>本主题为系列文章，分上下两篇。本文主要介绍 time/rate 的具体使用方法，另外一篇文章 《Golang 限流器 time/rate 实现剖析》 则着重介绍其内部实现原理。
+ 限流器是后台服务中的非常重要的组件，可以用来限制请求速率，保护服务，以免服务过载。 限流器的实现方法有很多种，例如滑动窗口法、Token Bucket、Leaky Bucket 等。
+其实 Golang 标准库中就自带了限流算法的实现，即 golang.org/x/time/rate。该限流器是基于 Token Bucket(令牌桶) 实现的。
+简单来说，令牌桶就是想象有一个固定大小的桶，系统会以恒定速率向桶中放 Token，桶满则暂时不放。 而用户则从桶中取 Token，如果有剩余 Token 就可以一直取。如果没有剩余 Token，则需要等到系统中被放置了 Token 才行。
+本文则主要集中介绍下该组件的具体使用方法：
+构造一个限流器 我们可以使用以下方法构造一个限流器对象：
+limiter := NewLimiter(10, 1); 这里有两个参数：
+ 第一个参数是 r Limit。代表每秒可以向 Token 桶中产生多少 token。Limit 实际上是 float64 的别名。 第二个参数是 b int。b 代表 Token 桶的容量大小。  那么，对于以上例子来说，其构造出的限流器含义为，其令牌桶大小为 1, 以每秒 10 个 Token 的速率向桶中放置 Token。
+除了直接指定每秒产生的 Token 个数外，还可以用 Every 方法来指定向 Token 桶中放置 Token 的间隔，例如：</description>
+			<content type="html"><![CDATA[<blockquote>
+<p>本主题为系列文章，分上下两篇。本文主要介绍 <code>time/rate</code> 的具体使用方法，另外一篇文章 <a href="https://www.cyhone.com/articles/analisys-of-golang-rate/">《Golang 限流器 time/rate 实现剖析》</a> 则着重介绍其内部实现原理。</p>
+</blockquote>
+<p>限流器是后台服务中的非常重要的组件，可以用来限制请求速率，保护服务，以免服务过载。
+限流器的实现方法有很多种，例如滑动窗口法、Token Bucket、Leaky Bucket 等。</p>
+<p>其实 Golang 标准库中就自带了限流算法的实现，即 <code>golang.org/x/time/rate</code>。该限流器是基于 Token Bucket(令牌桶) 实现的。</p>
+<p>简单来说，令牌桶就是想象有一个固定大小的桶，系统会以恒定速率向桶中放 Token，桶满则暂时不放。
+而用户则从桶中取 Token，如果有剩余 Token 就可以一直取。如果没有剩余 Token，则需要等到系统中被放置了 Token 才行。</p>
+<p>本文则主要集中介绍下该组件的具体使用方法：</p>
+<h1 id="构造一个限流器">构造一个限流器</h1>
+<p>我们可以使用以下方法构造一个限流器对象：</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">limiter</span> <span class="o">:=</span> <span class="nf">NewLimiter</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</code></pre></div><p>这里有两个参数：</p>
+<ol>
+<li>第一个参数是 <code>r Limit</code>。代表每秒可以向 Token 桶中产生多少 token。Limit 实际上是 float64 的别名。</li>
+<li>第二个参数是 <code>b int</code>。b 代表 Token 桶的容量大小。</li>
+</ol>
+<p>那么，对于以上例子来说，其构造出的限流器含义为，其令牌桶大小为 1, 以每秒 10 个 Token 的速率向桶中放置 Token。</p>
+<p>除了直接指定每秒产生的 Token 个数外，还可以用 Every 方法来指定向 Token 桶中放置 Token 的间隔，例如：</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">limit</span> <span class="o">:=</span> <span class="nf">Every</span><span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Millisecond</span><span class="p">);</span>
+<span class="nx">limiter</span> <span class="o">:=</span> <span class="nf">NewLimiter</span><span class="p">(</span><span class="nx">limit</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</code></pre></div><p>以上就表示每 100ms 往桶中放一个 Token。本质上也就是一秒钟产生 10 个。</p>
+<p>Limiter 提供了三类方法供用户消费 Token，用户可以每次消费一个 Token，也可以一次性消费多个 Token。
+而每种方法代表了当 Token 不足时，各自不同的对应手段。</p>
+<h1 id="waitwaitn">Wait/WaitN</h1>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">lim</span> <span class="o">*</span><span class="nx">Limiter</span><span class="p">)</span> <span class="nf">Wait</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">(</span><span class="nx">err</span> <span class="kt">error</span><span class="p">)</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">lim</span> <span class="o">*</span><span class="nx">Limiter</span><span class="p">)</span> <span class="nf">WaitN</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">n</span> <span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="nx">err</span> <span class="kt">error</span><span class="p">)</span>
+</code></pre></div><p>Wait 实际上就是 <code>WaitN(ctx,1)</code>。</p>
+<p>当使用 Wait 方法消费 Token 时，如果此时桶内 Token 数组不足 (小于 N)，那么 Wait 方法将会阻塞一段时间，直至 Token 满足条件。如果充足则直接返回。</p>
+<p>这里可以看到，Wait 方法有一个 context 参数。
+我们可以设置 context 的 Deadline 或者 Timeout，来决定此次 Wait 的最长时间。</p>
+<h1 id="allowallown">Allow/AllowN</h1>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">lim</span> <span class="o">*</span><span class="nx">Limiter</span><span class="p">)</span> <span class="nf">Allow</span><span class="p">()</span> <span class="kt">bool</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">lim</span> <span class="o">*</span><span class="nx">Limiter</span><span class="p">)</span> <span class="nf">AllowN</span><span class="p">(</span><span class="nx">now</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Time</span><span class="p">,</span> <span class="nx">n</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span>
+</code></pre></div><p>Allow 实际上就是 <code>AllowN(time.Now(),1)</code>。</p>
+<p>AllowN 方法表示，截止到某一时刻，目前桶中数目是否至少为 n 个，满足则返回 true，同时从桶中消费 n 个 token。
+反之返回不消费 Token，false。</p>
+<p>通常对应这样的线上场景，如果请求速率过快，就直接丢到某些请求。</p>
+<h1 id="reservereserven">Reserve/ReserveN</h1>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">lim</span> <span class="o">*</span><span class="nx">Limiter</span><span class="p">)</span> <span class="nf">Reserve</span><span class="p">()</span> <span class="o">*</span><span class="nx">Reservation</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">lim</span> <span class="o">*</span><span class="nx">Limiter</span><span class="p">)</span> <span class="nf">ReserveN</span><span class="p">(</span><span class="nx">now</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Time</span><span class="p">,</span> <span class="nx">n</span> <span class="kt">int</span><span class="p">)</span> <span class="o">*</span><span class="nx">Reservation</span>
+</code></pre></div><p>Reserve 相当于 <code>ReserveN(time.Now(), 1)</code>。</p>
+<p>ReserveN 的用法就相对来说复杂一些，当调用完成后，无论 Token 是否充足，都会返回一个 Reservation * 对象。</p>
+<p>你可以调用该对象的 Delay() 方法，该方法返回了需要等待的时间。如果等待时间为 0，则说明不用等待。
+必须等到等待时间之后，才能进行接下来的工作。</p>
+<p>或者，如果不想等待，可以调用 Cancel() 方法，该方法会将 Token 归还。</p>
+<p>举一个简单的例子，我们可以这么使用 Reserve 方法。</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">r</span> <span class="o">:=</span> <span class="nx">lim</span><span class="p">.</span><span class="nf">Reserve</span><span class="p">()</span>
+<span class="nx">f</span> <span class="p">!</span><span class="nx">r</span><span class="p">.</span><span class="nf">OK</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// Not allowed to act! Did you remember to set lim.burst to be &gt; 0 ?
+</span><span class="c1"></span>    <span class="k">return</span>
+<span class="p">}</span>
+<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nf">Delay</span><span class="p">())</span>
+<span class="nf">Act</span><span class="p">()</span> <span class="c1">// 执行相关逻辑
+</span></code></pre></div><h1 id="动态调整速率">动态调整速率</h1>
+<p>Limiter 支持可以调整速率和桶大小：</p>
+<ol>
+<li>SetLimit(Limit) 改变放入 Token 的速率</li>
+<li>SetBurst(int) 改变 Token 桶大小</li>
+</ol>
+<p>有了这两个方法，可以根据现有环境和条件，根据我们的需求，动态的改变 Token 桶大小和速率。</p>
+<h1 id="相关文章">相关文章</h1>
+<ul>
+<li><a href="https://www.cyhone.com/articles/analisys-of-golang-rate/">Golang 限流器 time/rate 实现剖析</a></li>
+<li><a href="https://www.cyhone.com/articles/analysis-of-uber-go-ratelimit/">uber-go 漏桶限流器使用与原理分析</a></li>
+</ul>
+<blockquote>
+<p>本文作者： cyhone
+本文链接： <a href="https://www.cyhone.com/articles/usage-of-golang-rate/">https://www.cyhone.com/articles/usage-of-golang-rate/</a>
+版权声明： 本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！</p>
+</blockquote>
+]]></content>
+		</item>
+		
+		<item>
+			<title>Golang标准库限流器timerate实现剖析</title>
+			<link>https://roninzc.github.io/posts/golang/%E6%A0%87%E5%87%86%E5%BA%93/golang%E6%A0%87%E5%87%86%E5%BA%93%E9%99%90%E6%B5%81%E5%99%A8timerate%E5%AE%9E%E7%8E%B0%E5%89%96%E6%9E%90/</link>
+			<pubDate>Wed, 03 Mar 2021 16:14:05 +0800</pubDate>
+			
+			<guid>https://roninzc.github.io/posts/golang/%E6%A0%87%E5%87%86%E5%BA%93/golang%E6%A0%87%E5%87%86%E5%BA%93%E9%99%90%E6%B5%81%E5%99%A8timerate%E5%AE%9E%E7%8E%B0%E5%89%96%E6%9E%90/</guid>
+			<description>限流器是微服务中必不缺少的一环，可以起到保护下游服务，防止服务过载等作用。上一篇文章 《Golang 限流器 time/rate 使用介绍》 简单介绍了 time/rate 的使用方法，本文则着重分析下其实现原理。建议在正式阅读本文之前，先阅读下上一篇文章。
+上一篇文章讲到，time/rate 是基于 Token Bucket(令牌桶) 算法实现的限流。本文将会基于源码，深入剖析下 Golang 是如何实现 Token Bucket 的。其代码也非常简洁，去除注释后，也就 200 行左右的代码量。
+同时，我也提供了 time/rate 注释版，辅助大家理解该组件的实现。
+背景 简单来说，令牌桶就是想象有一个固定大小的桶，系统会以恒定速率向桶中放 Token，桶满则暂时不放。 而用户则从桶中取 Token，如果有剩余 Token 就可以一直取。如果没有剩余 Token，则需要等到系统中被放置了 Token 才行。
+一般介绍 Token Bucket 的时候，都会有一张这样的原理图： 从这个图中看起来，似乎令牌桶实现应该是这样的：
+ 有一个 Timer 和一个 BlockingQueue。Timer 固定的往 BlockingQueue 中放 token。用户则从 BlockingQueue 中取数据。
+ 这固然是 Token Bucket 的一种实现方式，这么做也非常直观，但是效率太低了：我们需要不仅多维护一个 Timer 和 BlockingQueue，而且还耗费了一些不必要的内存。
+在 Golang 的 timer/rate 中的实现, 并没有单独维护一个 Timer，而是采用了 lazyload 的方式，直到每次消费之前才根据时间差更新 Token 数目，而且也不是用 BlockingQueue 来存放 Token，而是仅仅通过计数的方式。</description>
+			<content type="html"><![CDATA[<p>限流器是微服务中必不缺少的一环，可以起到保护下游服务，防止服务过载等作用。上一篇文章 <a href="https://www.cyhone.com/articles/usage-of-golang-rate/">《Golang 限流器 time/rate 使用介绍》</a> 简单介绍了 time/rate 的使用方法，本文则着重分析下其实现原理。建议在正式阅读本文之前，先阅读下上一篇文章。</p>
+<p>上一篇文章讲到，time/rate 是基于 Token Bucket(令牌桶) 算法实现的限流。本文将会基于源码，深入剖析下 Golang 是如何实现 Token Bucket 的。其代码也非常简洁，去除注释后，也就 200 行左右的代码量。</p>
+<p>同时，我也提供了 <a href="https://github.com/chenyahui/AnnotatedCode/tree/master/go/x/time">time/rate 注释版</a>，辅助大家理解该组件的实现。</p>
+<h1 id="背景">背景</h1>
+<p>简单来说，令牌桶就是想象有一个固定大小的桶，系统会以恒定速率向桶中放 Token，桶满则暂时不放。
+而用户则从桶中取 Token，如果有剩余 Token 就可以一直取。如果没有剩余 Token，则需要等到系统中被放置了 Token 才行。</p>
+<p>一般介绍 Token Bucket 的时候，都会有一张这样的原理图：
+<img src="https://www.cyhone.com/img/token-bucket/token-bucket.jpg" alt="Token Bucket 原理图"></p>
+<p>从这个图中看起来，似乎令牌桶实现应该是这样的：</p>
+<blockquote>
+<p>有一个 Timer 和一个 BlockingQueue。Timer 固定的往 BlockingQueue 中放 token。用户则从 BlockingQueue 中取数据。</p>
+</blockquote>
+<p>这固然是 Token Bucket 的一种实现方式，这么做也非常直观，但是效率太低了：我们需要不仅多维护一个 Timer 和 BlockingQueue，而且还耗费了一些不必要的内存。</p>
+<p>在 Golang 的 <code>timer/rate</code> 中的实现, 并没有单独维护一个 Timer，而是采用了 lazyload 的方式，直到每次消费之前才根据时间差更新 Token 数目，而且也不是用 BlockingQueue 来存放 Token，而是仅仅通过计数的方式。</p>
+<h1 id="token-的生成和消费">Token 的生成和消费</h1>
+<p>我们在 <a href="https://www.cyhone.com/articles/usage-of-golang-rate/">上一篇文章</a> 中讲到，Token 的消费方式有三种。但其实在内部实现，最终三种消费方式都调用了 reserveN 函数来生成和消费 Token。</p>
+<p>我们看下 reserveN 函数的具体实现，整个过程非常简单。在正式讲之前，我们先了解一个简单的概念：</p>
+<p>在 <code>time/rate</code> 中，<code>NewLimiter</code> 的第一个参数是速率 limit，代表了一秒钟可以产生多少 Token。
+那么简单换算一下，我们就可以知道一个 Token 的生成间隔是多少。</p>
+<p>有了这个生成间隔，我们就可以轻易地得到两个数据：
+<strong>1. 生成 N 个新的 Token 一共需要多久。</strong><code>time/rate</code> 中对应的实现函数为 <code>durationFromTokens</code>。
+<strong>2. 给定一段时长，这段时间一共可以生成多少个 Token。</strong><code>time/rate</code> 中对应的实现函数为 <code>tokensFromDuration</code>。</p>
+<p>那么，有了这些转换函数，整个过程就很清晰了，如下：</p>
+<ol>
+<li>计算从上次取 Token 的时间到当前时刻，期间一共新产生了多少 Token：
+我们只在取 Token 之前生成新的 Token，也就意味着每次取 Token 的间隔，实际上也是生成 Token 的间隔。我们可以利用 <code>tokensFromDuration</code>, 轻易的算出这段时间一共产生 Token 的数目。
+那么，当前 Token 数目 = 新产生的 Token 数目 + 之前剩余的 Token 数目 - 要消费的 Token 数目。</li>
+<li>如果消费后剩余 Token 数目大于零，说明此时 Token 桶内仍不为空，此时 Token 充足，无需调用侧等待。
+如果 Token 数目小于零，则需等待一段时间。
+那么这个时候，我们可以利用 <code>durationFromTokens</code> 将当前负值的 Token 数转化为需要等待的时间。</li>
+<li>将需要等待的时间等相关结果返回给调用方。</li>
+</ol>
+<p>从上面可以看出，其实整个过程就是利用了 <strong>Token 数可以和时间相互转化</strong> 的原理。而如果 Token 数为负，则需要等待相应时间即可。</p>
+<p><strong>注意</strong> 如果当消费时，Token 桶中的 Token 数目已经为负值了，依然可以按照上述流程进行消费。随着负值越来越小，等待的时间将会越来越长。
+从结果来看，这个行为跟用 Timer+BlockQueue 实现是一样的。</p>
+<p>此外，整个过程为了保证线程安全，更新令牌桶相关数据时都用了 mutex 加锁。</p>
+<p>我们模拟下请求与 Token 数变化的关系：</p>
+<ol>
+<li>当某一时间，桶内 Token 数为 3, 此时 A 线程请求 5 个 Token。那么此时桶内 Token 不足，因此 A 线程需要等待 2 个 Token 的时间。
+且此时桶内 Token 数变为 - 2。</li>
+<li>同时，B 线程请求 4 个 Token，此时桶内 Token 数为 - 2，因此 B 线程需要等待 2+4=6 个 Token 的时间，且此时桶内 Token 数变为 - 6。</li>
+</ol>
+<p>对于 Allow 函数实现时，只要判断需要等待的时间是否为 0 即可，如果大于 0 说明需要等待，则返回 False，反之返回 True。</p>
+<p>对于 Wait 函数，直接 <code>t := time.NewTimer(delay)</code>，等待对应的时间即可。</p>
+<h1 id="float-精度问题">float 精度问题</h1>
+<p>从上面原理讲述可以看出，在 Token 和时间的相互转化函数 <code>durationFromTokens</code> 和 <code>tokensFromDuration</code> 中，涉及到 float64 的乘除运算。
+一谈到 float 的乘除，我们就需要小心精度问题了。</p>
+<p>而 Golang 在这里也踩了坑，以下是 <code>tokensFromDuration</code> 最初的实现版本</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">limit</span> <span class="nx">Limit</span><span class="p">)</span> <span class="nf">tokensFromDuration</span><span class="p">(</span><span class="nx">d</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span><span class="p">)</span> <span class="kt">float64</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">d</span><span class="p">.</span><span class="nf">Seconds</span><span class="p">()</span> <span class="o">*</span> <span class="nb">float64</span><span class="p">(</span><span class="nx">limit</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div><p>这个操作看起来一点问题都没：每秒生成的 Token 数乘于秒数。
+然而，这里的问题在于，<code>d.Seconds()</code> 已经是小数了。两个小数相乘，会带来精度的损失。</p>
+<p>所以就有了这个 issue:<a href="https://github.com/golang/go/issues/34861">golang.org/issues/34861</a>。</p>
+<p>修改后新的版本如下：</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">limit</span> <span class="nx">Limit</span><span class="p">)</span> <span class="nf">tokensFromDuration</span><span class="p">(</span><span class="nx">d</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span><span class="p">)</span> <span class="kt">float64</span> <span class="p">{</span>
+    <span class="nx">sec</span> <span class="o">:=</span> <span class="nb">float64</span><span class="p">(</span><span class="nx">d</span><span class="o">/</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span> <span class="o">*</span> <span class="nb">float64</span><span class="p">(</span><span class="nx">limit</span><span class="p">)</span>
+    <span class="nx">nsec</span> <span class="o">:=</span> <span class="nb">float64</span><span class="p">(</span><span class="nx">d</span><span class="o">%</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span> <span class="o">*</span> <span class="nb">float64</span><span class="p">(</span><span class="nx">limit</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nx">sec</span> <span class="o">+</span> <span class="nx">nsec</span><span class="o">/</span><span class="mf">1e9</span>
+<span class="p">}</span>
+</code></pre></div><p><code>time.Duration</code> 是 <code>int64</code> 的别名，代表纳秒。分别求出秒的整数部分和小数部分，进行相乘后再相加，这样可以得到最精确的精度。</p>
+<h1 id="数值溢出问题">数值溢出问题</h1>
+<p>我们讲 reserveN 函数的具体实现时，第一步就是计算从当前时间到上次取 Token 的时刻，期间一共新产生了多少 Token，同时也可得出当前的 Token 是多少。</p>
+<p>我最开始的理解是，直接可以这么做：</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// elapsed 表示过去的时间差
+</span><span class="c1"></span><span class="nx">elapsed</span> <span class="o">:=</span> <span class="nx">now</span><span class="p">.</span><span class="nf">Sub</span><span class="p">(</span><span class="nx">lim</span><span class="p">.</span><span class="nx">last</span><span class="p">)</span>
+<span class="c1">// delta 表示这段时间一共新产生了多少 Token
+</span><span class="c1"></span><span class="nx">delta</span> <span class="p">=</span> <span class="nf">tokensFromDuration</span><span class="p">(</span><span class="nx">now</span><span class="p">.</span><span class="nf">Sub</span><span class="p">(</span><span class="nx">lim</span><span class="p">.</span><span class="nx">last</span><span class="p">))</span>
+
+<span class="nx">tokens</span> <span class="o">:=</span> <span class="nx">lim</span><span class="p">.</span><span class="nx">tokens</span> <span class="o">+</span> <span class="nx">delta</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">token</span><span class="p">&gt;</span> <span class="nx">lim</span><span class="p">.</span><span class="nx">burst</span><span class="p">){</span>
+    <span class="nx">token</span> <span class="p">=</span> <span class="nx">lim</span><span class="p">.</span><span class="nx">burst</span>
+<span class="p">}</span>
+</code></pre></div><p>其中，<code>lim.tokens</code> 是当前剩余的 Token，<code>lim.last</code> 是上次取 token 的时刻。<code>lim.burst</code> 是 Token 桶的大小。
+使用 tokensFromDuration 计算出新生成了多少 Token，累加起来后，不能超过桶的容量即可。</p>
+<p>这么做看起来也没什么问题，然而并不是这样。</p>
+<p>在 <code>time/rate</code> 里面是这么做的，如下代码所示：</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">maxElapsed</span> <span class="o">:=</span> <span class="nx">lim</span><span class="p">.</span><span class="nx">limit</span><span class="p">.</span><span class="nf">durationFromTokens</span><span class="p">(</span><span class="nb">float64</span><span class="p">(</span><span class="nx">lim</span><span class="p">.</span><span class="nx">burst</span><span class="p">)</span> <span class="o">-</span> <span class="nx">lim</span><span class="p">.</span><span class="nx">tokens</span><span class="p">)</span>
+<span class="nx">elapsed</span> <span class="o">:=</span> <span class="nx">now</span><span class="p">.</span><span class="nf">Sub</span><span class="p">(</span><span class="nx">last</span><span class="p">)</span>
+<span class="k">if</span> <span class="nx">elapsed</span> <span class="p">&gt;</span> <span class="nx">maxElapsed</span> <span class="p">{</span>
+    <span class="nx">elapsed</span> <span class="p">=</span> <span class="nx">maxElapsed</span>
+<span class="p">}</span>
+
+<span class="nx">delta</span> <span class="o">:=</span> <span class="nx">lim</span><span class="p">.</span><span class="nx">limit</span><span class="p">.</span><span class="nf">tokensFromDuration</span><span class="p">(</span><span class="nx">elapsed</span><span class="p">)</span>
+
+<span class="nx">tokens</span> <span class="o">:=</span> <span class="nx">lim</span><span class="p">.</span><span class="nx">tokens</span> <span class="o">+</span> <span class="nx">delta</span>
+<span class="k">if</span> <span class="nx">burst</span> <span class="o">:=</span> <span class="nb">float64</span><span class="p">(</span><span class="nx">lim</span><span class="p">.</span><span class="nx">burst</span><span class="p">);</span> <span class="nx">tokens</span> <span class="p">&gt;</span> <span class="nx">burst</span> <span class="p">{</span>
+    <span class="nx">tokens</span> <span class="p">=</span> <span class="nx">burst</span>
+<span class="p">}</span>
+</code></pre></div><p>与我们最开始的代码不一样的是，它没有直接用 <code>now.Sub(lim.last)</code> 来转化为对应的 Token 数，而是
+先用 <code>lim.limit.durationFromTokens(float64(lim.burst) - lim.tokens)</code>，计算把桶填满的时间 maxElapsed。
+取 elapsed 和 maxElapsed 的最小值。</p>
+<p>这么做算出的结果肯定是正确的，但是这么做相比于我们的做法，好处在哪里？</p>
+<p>对于我们的代码，当 last 非常小的时候（或者当其为初始值 0 的时候），此时 <code>now.Sub(lim.last)</code> 的值就会非常大，如果 <code>lim.limit</code> 即每秒生成的 Token 数目也非常大时，直接将二者进行乘法运算，<strong>结果有可能会溢出。</strong></p>
+<p>因此，<code>time/rate</code> 先计算了把桶填满的时间，将其作为时间差值的上限，这样就规避了溢出的问题。</p>
+<h1 id="token-的归还">Token 的归还</h1>
+<p>而对于 Reserve 函数，返回的结果中，我们可以通过 <code>Reservation.Delay()</code> 函数，得到需要等待时间。
+同时调用方可以根据返回条件和现有情况，可以调用 <code>Reservation.Cancel()</code> 函数，取消此次消费。
+当调用 <code>Cancel()</code> 函数时，消费的 Token 数将会尽可能归还给 Token 桶。</p>
+<p>此外，我们在 <a href="https://www.cyhone.com/articles/usage-of-golang-rate/">上一篇文章</a> 中讲到，Wait 函数可以通过 Context 进行取消或者超时等，
+当通过 Context 进行取消或超时时，此时消费的 Token 数也会归还给 Token 桶。</p>
+<p>然而，归还 Token 的时候，并不是简单的将 Token 数直接累加到现有 Token 桶的数目上，这里还有一些注意点：</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">restoreTokens</span> <span class="o">:=</span> <span class="nb">float64</span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">tokens</span><span class="p">)</span> <span class="o">-</span> <span class="nx">r</span><span class="p">.</span><span class="nx">limit</span><span class="p">.</span><span class="nf">tokensFromDuration</span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">lim</span><span class="p">.</span><span class="nx">lastEvent</span><span class="p">.</span><span class="nf">Sub</span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">timeToAct</span><span class="p">))</span>
+<span class="k">if</span> <span class="nx">restoreTokens</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="p">{</span>
+    <span class="k">return</span>
+<span class="p">}</span>
+</code></pre></div><p>以上代码就是计算需要归还多少的 Token。其中：</p>
+<ol>
+<li><code>r.tokens</code> 指的是本次消费的 Token 数</li>
+<li><code>r.timeToAct</code> 指的是 Token 桶可以满足本次消费数目的时刻，也就是消费的时刻 + 等待的时长。</li>
+<li><code>r.lim.lastEvent</code> 指的是最近一次消费的 timeToAct 值</li>
+</ol>
+<p>其中：<code>r.limit.tokensFromDuration(r.lim.lastEvent.Sub(r.timeToAct))</code> 指的是，从该次消费到当前时间，一共又新消费了多少 Token 数目。</p>
+<p>根据代码来看，要归还的 Token 要是该次消费的 Token 减去新消费的 Token。
+不过这里我还没有想明白，为什么归还的时候，要减去新消费数目。</p>
+<p>按照我的理解，直接归还全部 Token 数目，这样对于下一次消费是无感知影响的。这块的具体原因还需要进一步探索。</p>
+<h1 id="总结">总结</h1>
+<p>Token Bucket 其实非常适合互联网突发式请求的场景，其请求 Token 时并不是严格的限制为固定的速率，而是中间有一个桶作为缓冲。
+只要桶中还有 Token，请求就还可以一直进行。当突发量激增到一定程度，则才会按照预定速率进行消费。</p>
+<p>此外在维基百科中，也提到了分层 Token Bucket(HTB) 作为传统 Token Bucket 的进一步优化，Linux 内核中也用它进行流量控制。</p>
+<h1 id="参考">参考</h1>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Token_bucket">Wiki: Token bucket</a></li>
+</ul>
+<h1 id="相关文章">相关文章</h1>
+<ul>
+<li><a href="https://www.cyhone.com/articles/usage-of-golang-rate/">Golang 限流器 time/rate 使用介绍</a></li>
+<li><a href="https://www.cyhone.com/articles/analysis-of-uber-go-ratelimit/">uber-go 漏桶限流器使用与原理分析</a></li>
+</ul>
+<p><em>如果你在阅读过程中发现本文有错误或者存疑之处，请在下方评论区或者通过公众号进行留言，作者会尽快回复和解答。感谢您的支持与帮助。</em></p>
+<blockquote>
+<p><strong>本文作者：</strong> cyhone
+<strong>本文链接：</strong> <a href="https://www.cyhone.com/articles/analisys-of-golang-rate/">https://www.cyhone.com/articles/analisys-of-golang-rate/</a>
+<strong>版权声明：</strong> 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">BY-NC-SA</a> 许可协议。转载请注明出处！</p>
+</blockquote>
+]]></content>
+		</item>
+		
+		<item>
+			<title>RSA(七) X.509 自签名证书</title>
+			<link>https://roninzc.github.io/posts/rsa/rsa%E4%B8%83-x.509-%E8%87%AA%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6/</link>
+			<pubDate>Wed, 03 Mar 2021 13:47:25 +0800</pubDate>
+			
+			<guid>https://roninzc.github.io/posts/rsa/rsa%E4%B8%83-x.509-%E8%87%AA%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6/</guid>
+			<description>前言 继前文RSA(六) X.509 CA 证书 所述，X.509 CA 证书是由 𝐶𝐴CA 认证中心签名并颁发的；但是最后，作者留下了这么一个疑问，就是如果在企业内网，我同样需要对公钥进行认证，但是因为不需要连接外网，所以并不需要 𝐶𝐴CA 证书(因为，𝐶𝐴CA 证书毕竟开销不菲)；那么是否有这样的一种可替代的方案，在不使用 𝐶𝐴CA 证书的前提下，能否保证公钥的合法性？答案是自签名证书；
+备注，本文是作者的原创作品，转载请注明出处。
+ 转载至https://www.shangyang.me/2017/05/27/encrypt-rsa-selfsigned-certificate/
+ 定义 看下 wikipedia https://en.wikipedia.org/wiki/Self-signed_certificate 上的最重要的一段解释
+ In technical terms a self-signed certificate is one signed with its own private key.
+ 自签名证书说穿了，就是一个由自己的私钥进行签名的证书；
+与 CA 证书的区别 通过 RSA(六) X.509 CA 证书 章节我们知道，要保证公钥的合法性，我们需要把自己的公钥交给第三方 𝐶𝐴CA 机构，通过它的私钥来进行签名，并生成一张 𝐶𝐴CA 证书并颁发给用户；而与 𝐶𝐴CA 证书相对应的就是自签名证书，也就是说，我自己的公钥不交给第三方的 𝐶𝐴CA 机构进行签名，而是直接由自己的私钥进行签名，并生成一张自签名的证书；
+如何生成 这里我主要讲解一下，如果通过 openssl 来生成自签名的证书，
+$ openssl req \ &amp;gt; -newkey rsa:2048 -nodes -keyout private.</description>
+			<content type="html"><![CDATA[<h1 id="前言">前言</h1>
+<p>继前文<a href="https://www.shangyang.me/2017/05/27/encrypt-rsa-x509/">RSA(六) X.509 CA 证书</a> 所述，<em>X.509 CA</em> 证书是由 𝐶𝐴CA 认证中心签名并颁发的；但是最后，作者留下了这么一个疑问，就是如果在企业内网，我同样需要对公钥进行认证，但是因为不需要连接外网，所以并不需要 𝐶𝐴CA 证书(因为，𝐶𝐴CA 证书毕竟开销不菲)；那么是否有这样的一种可替代的方案，在不使用 𝐶𝐴CA 证书的前提下，能否保证公钥的合法性？答案是<code>自签名证书</code>；</p>
+<p>备注，本文是作者的原创作品，转载请注明出处。</p>
+<blockquote>
+<p>转载至<code>https://www.shangyang.me/2017/05/27/encrypt-rsa-selfsigned-certificate/</code></p>
+</blockquote>
+<h1 id="定义">定义</h1>
+<p>看下 wikipedia <a href="https://en.wikipedia.org/wiki/Self-signed_certificate">https://en.wikipedia.org/wiki/Self-signed_certificate</a> 上的最重要的一段解释</p>
+<blockquote>
+<p>In technical terms a self-signed certificate is one signed with its own private key.</p>
+</blockquote>
+<p>自签名证书说穿了，就是一个由自己的私钥进行签名的证书；</p>
+<h1 id="与-ca-证书的区别">与 CA 证书的区别</h1>
+<p>通过 <a href="https://www.shangyang.me/2017/05/27/encrypt-rsa-x509/">RSA(六) X.509 CA 证书</a> 章节我们知道，要保证公钥的合法性，我们需要把自己的公钥交给第三方 𝐶𝐴CA 机构，通过它的私钥来进行签名，并生成一张 𝐶𝐴CA 证书并颁发给用户；而与 𝐶𝐴CA 证书相对应的就是自签名证书，也就是说，我自己的公钥不交给第三方的 𝐶𝐴CA 机构进行签名，而是直接由自己的私钥进行签名，并生成一张自签名的证书；</p>
+<h1 id="如何生成">如何生成</h1>
+<p>这里我主要讲解一下，如果通过 <em>openssl</em> 来生成自签名的证书，</p>
+<pre><code>$ openssl req \
+&gt;        -newkey rsa:2048 -nodes -keyout private.key \
+&gt;        -x509 -days 365 -out self-signed.crt
+</code></pre><p>然后同样需要输入 <a href="https://www.shangyang.me/2017/05/27/encrypt-rsa-x509/#%E9%80%9A%E8%BF%87-CSR-%E7%94%B3%E8%AF%B7-X509-CA-%E8%AF%81%E4%B9%A6">CSR 相关的信息</a>来申请；最后，会在本地目录中生成一个私钥 <em>private.key</em> 和一张自签名的证书 <em>self-signed.crt</em>；注意，自签名证书文件的后缀为 <em>.crt</em>；下面来看看各个参数的简要说明，</p>
+<p><code>-x509</code>告诉 openssl 生成一张自签名的证书；
+<code>-nodes</code>告诉 openssl 在生成私钥的时候忽略密码</p>
+<p>参考
+<a href="https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-apache-in-ubuntu-16-04">How To Create a Self-Signed SSL Certificate for Apache in Ubuntu 16.04</a></p>
+<p><a href="https://www.digitalocean.com/community/tutorials/openssl-essentials-working-with-ssl-certificates-private-keys-and-csrs">OpenSSL Essentials: Working with SSL Certificates, Private Keys and CSRs</a></p>
+<h1 id="内部结构">内部结构</h1>
+<p>我们来查看一下刚才通过 openssl 生成的自签名证书 <em>self-signed.crt</em> 的内部结构；</p>
+<pre><code>$ openssl x509 -text -noout -in domain.crt
+</code></pre><p>内容如下，</p>
+<pre><code>Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            9f:56:fd:f5:9d:13:2e:d2
+        Signature Algorithm: sha1WithRSAEncryption
+        Issuer: C=CN, ST=ChengDu, L=ChengDu, O=HRX, OU=HRX, CN=HRX/emailAddress=comedshang@163.com
+        Validity
+            Not Before: May 27 13:42:23 2017 GMT
+            Not After : May 27 13:42:23 2018 GMT
+        Subject: C=CN, ST=ChengDu, L=ChengDu, O=HRX, OU=HRX, CN=HRX/emailAddress=comedshang@163.com
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+            RSA Public Key: (2048 bit)
+                Modulus (2048 bit):
+                    00:e5:06:e7:94:b4:ff:ad:ae:26:9c:2c:76:2e:d2:
+                    c7:f6:b3:51:9a:15:1f:d6:6f:ee:f7:7b:13:61:b5:
+                    d5:07:de:6f:e4:78:05:cc:b3:74:fc:c4:ec:7f:07:
+                    c7:b3:1b:c3:b6:c5:e8:9a:00:48:5c:e3:7c:51:e2:
+                    34:1d:0e:e0:2f:4f:3d:4a:68:e3:fd:b4:c2:79:7f:
+                    f3:ac:24:6d:71:d6:44:7a:97:7a:10:e0:5b:2e:1c:
+                    80:91:71:4c:45:e8:97:2c:5d:30:68:1c:2a:28:96:
+                    24:1a:a2:40:ad:d8:aa:9b:d8:3b:89:e4:eb:a0:77:
+                    a4:1f:ab:5f:7d:8e:82:37:1d:c5:f5:9d:d6:5a:19:
+                    ea:5e:57:35:f9:ba:63:66:f0:4c:48:97:22:8f:2f:
+                    bf:7f:51:fe:bf:20:01:3c:17:11:9d:82:01:7c:f5:
+                    31:04:c7:33:10:75:5c:2a:b0:ae:d1:12:fe:6e:b9:
+                    5b:cf:67:1e:78:b6:ae:87:70:65:f8:c6:88:c6:10:
+                    7c:58:f5:7e:15:8a:47:97:9c:e1:68:7b:ed:7c:db:
+                    e5:6a:de:c1:4b:a1:05:6d:da:1e:bf:44:f9:05:6b:
+                    bb:c3:41:f3:f5:a8:39:7a:2b:eb:ac:d9:61:30:bf:
+                    0d:56:54:f8:39:b9:fc:01:93:5a:1d:aa:bf:2f:c8:
+                    30:97
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Subject Key Identifier: 
+                CB:3C:17:D8:D4:F1:C2:7C:00:57:46:48:1F:9B:A2:4F:DA:9A:92:66
+            X509v3 Authority Key Identifier: 
+                keyid:CB:3C:17:D8:D4:F1:C2:7C:00:57:46:48:1F:9B:A2:4F:DA:9A:92:66
+                DirName:/C=CN/ST=ChengDu/L=ChengDu/O=HRX/OU=HRX/CN=HRX/emailAddress=comedshang@163.com
+                serial:9F:56:FD:F5:9D:13:2E:D2
+
+            X509v3 Basic Constraints: 
+                CA:TRUE
+    Signature Algorithm: sha1WithRSAEncryption
+        b1:6e:10:48:3c:4b:d1:4d:6e:5c:14:34:79:89:e0:95:3e:48:
+        3d:53:6c:65:64:ce:90:e2:da:17:2f:e2:8e:13:6a:1c:e2:d8:
+        b9:4c:f2:24:19:60:64:ae:66:cb:e6:82:de:a5:22:40:8e:50:
+        94:4c:5f:87:6e:f6:c4:be:ff:3b:75:eb:3a:f5:eb:aa:47:c4:
+        5c:14:d9:7d:38:ee:28:8c:96:8f:22:a1:85:63:a9:e3:23:d2:
+        64:fe:50:dd:ab:4e:53:f6:f7:67:c1:ec:39:89:20:04:f1:3f:
+        f1:18:5a🆎77:eb:02:d3:93:34:ca:e8:81:6b:6f:60:5c:9d:
+        b7:1f:e9:be:cb:9a:b2:73:47:52:d7:d6:89:ce:34:4c:46:3c:
+        c3:73:9f:93:07:72:41:d4:64:f9:f1:52:56:78:ac:96:fe:da:
+        b5:c0:b3:8f:e0:5e:8c:a3:bf:21:d7:99:27:ff:65:e4:62:8c:
+        15:14:8f:bb:04:54:30:4e:5e:32:a8:8c:ab:70:27:14:99:5e:
+        9b:11:dc:0a:e8:d4:59:8b:98🇩🇪30:b3:5e:f2:8c:e4:b3:2b:
+        62:07:9a:74:52:c0:e3:54:4c:86:4b💿88:f3:6b:1a:c8:66:
+        d6🆎1d:c5:12:e2:66:0a:01:a8:3d:0c:f8:d4:ac:1d:74:80:
+        83:06:3f:6d
+</code></pre><p>备注，要参看其它证书类型的内容，参考 <a href="https://www.digitalocean.com/community/tutorials/openssl-essentials-working-with-ssl-certificates-private-keys-and-csrs#view-certificates">https://www.digitalocean.com/community/tutorials/openssl-essentials-working-with-ssl-certificates-private-keys-and-csrs#view-certificates</a></p>
+<p>一些特性，</p>
+<ul>
+<li>首先，我们可以看到不像 𝐶𝐴CA 证书那样有多层证书结构，自签名证书只有一层证书结构；也就是没有 Certificate Chain 的概念；</li>
+<li>再次，可以看到 <em>Issuer</em> 发布者和证书拥有者 <em>Subject</em> 是相同的，都是 <em>C=CN, ST=ChengDu, L=ChengDu, O=HRX, OU=HRX, <a href="mailto:CN=HRX/emailAddress=comedshang@163.com">CN=HRX/emailAddress=comedshang@163.com</a></em>，表明证书的签名方和证书自己是同一个机构(或者角色)，这也就是<code>自签名</code>命名的由来；</li>
+</ul>
+<p>关键内容，</p>
+<ul>
+<li>Subject Public Key Info
+这段内容就是公钥的内容了；</li>
+<li>Signature Algorithm: sha1WithRSAEncryption
+这段内容就表示对公钥和身份信息一起的签名信息了，可以看到，采用的是 𝑆𝐻𝐴1SHA1 算法；</li>
+</ul>
+<p>最后，比较重要的是，因为该证书只有一层，所以，自签名证书在通讯过程中扮演的也就是 Root Certificate，通常是需要被加载如客户端的 trust store 中；</p>
+<h1 id="如何保证内网通讯的安全性">如何保证内网通讯的安全性</h1>
+<p>比如内网中，Alice 想和 Bob 保持可靠的加密通讯；</p>
+<ul>
+<li>
+<p>首先，Alice 需要生成秘钥 𝐾𝑝Kp 以及自签名证书 𝐶𝑠𝑒𝑙𝑓Cself</p>
+</li>
+<li>
+<p>然后，Bob 通过某种方式将 Alice 的 𝐶𝑠𝑒𝑙𝑓Cself 加入自己的 trust store 中；
+注意，如果 Bob 是通过浏览器访问的 Alice 站点，那么浏览器会提示，是否相信该证书，如果选择相信，这个时候，浏览器会自动将该 𝐶𝑠𝑒𝑙𝑓Cself 证书加入自己的 trust store 中；</p>
+</li>
+<li>
+<p>之后，某个时刻，Bob 向 Alice 发起安全通讯的会话，双方握手过程中，</p>
+</li>
+<li>
+<p>Alice 将 𝐶′𝑠𝑒𝑙𝑓Cself′ (X.509 自签名)证书发送给 Bob</p>
+</li>
+<li>
+<p>Bob 通过 trust store 中之前预加载的 𝐶𝑠𝑒𝑙𝑓Cself 中所指明的签名算法对 𝐶′𝑠𝑒𝑙𝑓Cself′ 进行签名，得到签名 𝑆′S′</p>
+</li>
+<li>
+<p>最后 Bob 使用 trust store 中 𝐶𝑠𝑒𝑙𝑓Cself 的签名 𝑆S 与 𝑆′S′ 进行比较，</p>
+</li>
+<li>
+<p>若相等，则表示 Alice 当前发送过来的证书是可靠的，也就是说，其身份信息和公钥是合法的，没有被伪造过；</p>
+</li>
+<li>
+<p>若不等，则表示 Alice 当前发送过来的证书是不可靠的，其身份信息或者是公钥是被篡改过的；应当立即停止与 Alice 的通讯；这种情况下，往往会提示握手失败，证书不可靠；</p>
+</li>
+</ul>
+<p>但切记，在公网中使用自签名证书的 SSL 加密通讯的方式是不可靠的，其根本原因是，因为没有公钥基础设施的支持，其自签名证书很容易被伪造；这部分内容在之前的 <a href="https://www.shangyang.me/2017/05/25/encrypt-rsa-pki/">RSA(五) PKI (Public Key Infrastructure) 公钥基础设施</a> 等系列文章中有过详细的阐述，有兴趣的读者可以从这里开始；</p>
+<h1 id="如何加入-trust-store">如何加入 trust store</h1>
+<p>参考如下的几篇文章，</p>
+<p>openssl with Apache:</p>
+<p><a href="https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-apache-in-ubuntu-16-04">How To Create a Self-Signed SSL Certificate for Apache in Ubuntu 16.04</a></p>
+<p><a href="https://www.akadia.com/services/ssh_test_certificate.html">How to create a self-signed SSL Certificate for Apache</a></p>
+<p>java keytool series:</p>
+<dl>
+<dt>Tomcat SSL Installation Instructions</dt>
+<dd><a href="https://www.sslshopper.com/tomcat-ssl-installation-instructions.html">https://www.sslshopper.com/tomcat-ssl-installation-instructions.html</a></dd>
+</dl>
+<p>java keytool - Key and Certificate Management Tool: <a href="http://docs.oracle.com/javase/1.5.0/docs/tooldocs/solaris/keytool.html">http://docs.oracle.com/javase/1.5.0/docs/tooldocs/solaris/keytool.html</a></p>
+<p>Import a private key into a Java Key Store: <a href="http://commandlinefanatic.com/cgi-bin/showarticle.cgi?article=art049">http://commandlinefanatic.com/cgi-bin/showarticle.cgi?article=art049</a></p>
+]]></content>
+		</item>
+		
+		<item>
+			<title>RSA(六) X.509 CA 证书</title>
+			<link>https://roninzc.github.io/posts/rsa/rsa%E5%85%AD-x.509-ca-%E8%AF%81%E4%B9%A6/</link>
+			<pubDate>Wed, 03 Mar 2021 13:46:25 +0800</pubDate>
+			
+			<guid>https://roninzc.github.io/posts/rsa/rsa%E5%85%AD-x.509-ca-%E8%AF%81%E4%B9%A6/</guid>
+			<description>前言 由前文 RSA(五) PKI (Public Key Infrastructure) 公钥基础设施可知，CA 证书授权中心颁发给用户的是一张 X.509 证书；本篇文章，博主将带领大家一探 X.509 证书的究竟；
+重要：本文为作者的原创作品，转载需注明出处；
+ 转载至https://www.shangyang.me/2017/05/27/encrypt-rsa-selfsigned-certificate/
+ 通过 CSR 申请 X509 CA 证书 这里大致讲解如何申请 X.509 CA 证书的流程，
+ 用户先在本地通过 RSA 生成一对公钥 𝐾𝑝Kp 和密钥 𝐾𝑠Ks， 然后，用户在本地生成一张 𝐶𝑆𝑅CSR 证书，既 Certificate Signing Request  需要填写诸如你的域名，公司名，部门名称，城市名，地区名，国家名，电子邮件等等证明你身份的信息， 添加用户公钥 𝐾𝑝 将上述信息通过 𝐾𝑠 进行签名得到 𝑆𝑐𝑠𝑟 将上述的签名 𝑆𝑐𝑠𝑟、𝐾𝑝 以及身份信息合并成为一张 𝐶𝑆𝑅 证书 ; TODO: 需要合并 𝑆𝑐𝑠𝑟 吗？这个还需要进一步求证……   申请者通过向 CA 中心或者 RA 中心提交 𝐶𝑆𝑅 证书，申请 X.509 证书； 𝐶𝐴 中心用它的密钥 𝐾𝑠(𝑐𝑎)Ks(ca) 对用户提交的 𝐶𝑆𝑅 证书进行签名，将签名和 𝐶𝑆𝑅 合并生成一张 X.</description>
+			<content type="html"><![CDATA[<h1 id="前言">前言</h1>
+<p>由前文 <a href="https://www.shangyang.me/2017/05/25/encrypt-rsa-pki/">RSA(五) PKI (Public Key Infrastructure) 公钥基础设施</a>可知，CA 证书授权中心颁发给用户的是一张 <em>X.509 证书</em>；本篇文章，博主将带领大家一探 <em>X.509 证书</em>的究竟；</p>
+<p>重要：本文为作者的原创作品，转载需注明出处；</p>
+<blockquote>
+<p>转载至<code>https://www.shangyang.me/2017/05/27/encrypt-rsa-selfsigned-certificate/</code></p>
+</blockquote>
+<h1 id="通过-csr-申请-x509-ca-证书">通过 CSR 申请 X509 CA 证书</h1>
+<p>这里大致讲解如何申请 <em>X.509 CA</em> 证书的流程，</p>
+<ol>
+<li>用户先在本地通过 RSA 生成一对公钥 𝐾𝑝Kp 和密钥 𝐾𝑠Ks，</li>
+<li>然后，用户在本地生成一张 𝐶𝑆𝑅CSR 证书，既 <a href="https://en.wikipedia.org/wiki/Certificate_signing_request">Certificate Signing Request</a>
+<ul>
+<li>需要填写诸如你的域名，公司名，部门名称，城市名，地区名，国家名，电子邮件等等证明你身份的信息，</li>
+<li>添加用户公钥 𝐾𝑝</li>
+<li>将上述信息通过 𝐾𝑠 进行签名得到 𝑆𝑐𝑠𝑟</li>
+<li>将上述的签名 𝑆𝑐𝑠𝑟、𝐾𝑝 以及身份信息合并成为一张 𝐶𝑆𝑅 证书 ;
+TODO: 需要合并 𝑆𝑐𝑠𝑟 吗？这个还需要进一步求证……</li>
+</ul>
+</li>
+<li>申请者通过向 CA 中心或者 RA 中心提交 𝐶𝑆𝑅 证书，申请 <em>X.509 证书</em>；</li>
+<li>𝐶𝐴 中心用它的密钥 𝐾𝑠(𝑐𝑎)Ks(ca) 对用户提交的 𝐶𝑆𝑅 证书进行签名，将签名和 𝐶𝑆𝑅 合并生成一张 <em>X.509 证书</em>；详细的签名过程，
+<ul>
+<li>𝐶𝐴 中心通过签名算法(比如 MD5)对 𝐶𝑆𝑅 证书进行签名；</li>
+<li>然后通过 𝐾𝑠(𝑐𝑎)) 对上述的签名进行加密，得到加密后的签名；</li>
+<li>最后，将加密后的签名和用户提交的 𝐶𝑆𝑅合并成为一张 <em>X.509 证书</em>；</li>
+</ul>
+</li>
+<li>最后将该 <em>X.509 证书</em> 颁发给用户；</li>
+</ol>
+<p>备注，如何生成 CSR 证书可以参考 <a href="https://www.sslshopper.com/article-most-common-openssl-commands.html">https://www.sslshopper.com/article-most-common-openssl-commands.html</a></p>
+<h1 id="证书链-certificate-chain">证书链 Certificate Chain</h1>
+<h2 id="什么是证书链">什么是证书链</h2>
+<p><em>X.509 证书</em> 中往往不止一张证书，而是由一系列的证书所组成的证书链，通常包含这样三层证书所构成的证书链，</p>
+<p><img src="https://www.shangyang.me/2017/05/27/encrypt-rsa-x509/certificate-chain.png" alt="img"></p>
+<ol>
+<li>root certificate，根证书</li>
+<li>intermediates certificates，一系列中间证书</li>
+<li>end-user certificate，终端用户证书</li>
+</ol>
+<p>相信大部分读者会和我一样，迷惑，为什么一张 <em>X.509</em> 证书要搞得这么复杂？</p>
+<p>这样做其实是有历史原因的，那是因为随系统和浏览器预安装的根证书毕竟是有限的，往往就那么些，一旦系统已经发布，大部分用户也已经安装好了，Root Certificate 既根证书就没有办法再通过预安装的方式来进行扩充了；但是我们知道，会有日新月异的新的 CA 公司成立，并被允许授权颁发 <em>X.509</em> 证书，毕竟，我们要允许市场的充分竞争，那么它们的公钥如何预安装到客户端的浏览器和操作系统上呢？如果不能预安装，由前文<a href="https://www.shangyang.me/2017/05/25/encrypt-rsa-pki/#%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E5%85%AC%E9%92%A5%E4%B8%8D%E8%A2%AB%E7%AF%A1%E6%94%B9%E7%9A%84">如何保证公钥不被篡改的</a>分析可知，它们所颁发的证书是不可靠的，是可以被篡改的；那么如何调和这个矛盾呢？该怎么办呢？</p>
+<p>于是，intermediates certificates 中间证书就出现了，这些证书就是表示由 Root Certificate 证书所签名认证的证书，这样，新的 CA 公司所颁发的证书可以由 Root Certificate 进行认证，保证其合法性和可靠性，这样就充分允许了新的 CA 公司成立并参与 CA 这块市场的竞争了；</p>
+<p>下面，就用这么一个形象的例子来描述，比如，有一天，中国成立了一家 ShangYang 公司，该公司的主营业务就是为广大客户进行证书授权，参与 CA 领域的商业竞争；那么这个时候呢，我需要向掌管 Root Certificate 的机构提交申请，请它签名我的 CA 公钥 (说好的市场充分竞争呢？Root Certificate 机构不就是赤裸裸的垄断机构？谁知道呢..)，生成一张 intermediates certificate 中间证书；这样，由 ShangYang 公司所签名的证书就得到了 Root Certificate 的认证，那么由该公司所颁发的 <em>X.509</em> 证书就是合法，正规的了；</p>
+<p>由此，我们也能够大致知道整个证书链的验证过程了，证书链的验证过程将会在后续<a href="https://www.shangyang.me/2017/05/27/encrypt-rsa-x509/#%E8%AF%81%E4%B9%A6%E9%93%BE%E7%9A%84%E9%AA%8C%E8%AF%81%E8%BF%87%E7%A8%8B">证书链的验证过程</a>进行详细的描述；</p>
+<p>总结一下，</p>
+<p>根证书是被预装到客户端电脑或者用户其它终端设备上的(比如手机)，它的作用主要是验证 CA 证书签名的合法性，也就是保证 CA 的证书(含 CA 的公钥)的合法性；最后，end-user certificate 终端用户证书，该证书由 CA 的证书保证其合法性；所以，可以看到，各个证书的验证过程是一环扣一环的，根证书验证 CA 证书的合法性，CA 证书验证用户证书的合法性；</p>
+<h2 id="证书链中每个证书所包含的内容">证书链中每个证书所包含的内容</h2>
+<p>我们来看看 wikipedia.org 的 <em>X.509</em> 证书的情况，他是由 GlobalSign 机构颁发的，</p>
+<h3 id="end-user或-end-entity-certificate-既终端用户证书">End-user(或 End-entity) certificate 既终端用户证书</h3>
+<pre><code>Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            10:e6:fc:62:b7:41:8a:d5:00:5e:45:b6
+    Signature Algorithm: sha256WithRSAEncryption
+        Issuer: C=BE, O=GlobalSign nv-sa, CN=GlobalSign Organization Validation CA - SHA256 - G2
+        Validity
+            Not Before: Nov 21 08:00:00 2016 GMT
+            Not After : Nov 22 07:59:59 2017 GMT
+        Subject: C=US, ST=California, L=San Francisco, O=Wikimedia Foundation, Inc., CN=*.wikipedia.org
+        Subject Public Key Info:
+            Public Key Algorithm: id-ecPublicKey
+                Public-Key: (256 bit)
+                pub: 
+                    04:c9:22:69:31:8a:d6:6c:ea:da:c3:7f:2c:ac:a5:
+                    af:c0:02:ea:81:cb:65:b9:fd:0c:6d:46:5b:c9:1e:
+                    ed:b2:ac:2a:1b:4a:ec:80:7b:e7:1a:51:e0:df:f7:
+                    c7:4a:20:7b:91:4b:20:07:21:ce:cf:68:65:8c:c6:
+                    9d:3b:ef:d5:c1
+                ASN1 OID: prime256v1
+                NIST CURVE: P-256
+        X509v3 extensions:
+            X509v3 Key Usage: critical
+                Digital Signature, Key Agreement
+            Authority Information Access: 
+                CA Issuers - URI:http://secure.globalsign.com/cacert/gsorganizationvalsha2g2r1.crt
+                OCSP - URI:http://ocsp2.globalsign.com/gsorganizationvalsha2g2
+
+            X509v3 Certificate Policies: 
+                Policy: 1.3.6.1.4.1.4146.1.20
+                  CPS: https://www.globalsign.com/repository/
+                Policy: 2.23.140.1.2.2
+
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            X509v3 CRL Distribution Points: 
+
+                Full Name:
+                  URI:http://crl.globalsign.com/gs/gsorganizationvalsha2g2.crl
+
+            X509v3 Subject Alternative Name: 
+                DNS:*.wikipedia.org, DNS:*.m.mediawiki.org, DNS:*.m.wikibooks.org, DNS:*.m.wikidata.org, DNS:*.m.wikimedia.org, DNS:*.m.wikimediafoundation.org, DNS:*.m.wikinews.org, DNS:*.m.wikipedia.org, DNS:*.m.wikiquote.org, DNS:*.m.wikisource.org, DNS:*.m.wikiversity.org, DNS:*.m.wikivoyage.org, DNS:*.m.wiktionary.org, DNS:*.mediawiki.org, DNS:*.planet.wikimedia.org, DNS:*.wikibooks.org, DNS:*.wikidata.org, DNS:*.wikimedia.org, DNS:*.wikimediafoundation.org, DNS:*.wikinews.org, DNS:*.wikiquote.org, DNS:*.wikisource.org, DNS:*.wikiversity.org, DNS:*.wikivoyage.org, DNS:*.wiktionary.org, DNS:*.wmfusercontent.org, DNS:*.zero.wikipedia.org, DNS:mediawiki.org, DNS:w.wiki, DNS:wikibooks.org, DNS:wikidata.org, DNS:wikimedia.org, DNS:wikimediafoundation.org, DNS:wikinews.org, DNS:wikiquote.org, DNS:wikisource.org, DNS:wikiversity.org, DNS:wikivoyage.org, DNS:wiktionary.org, DNS:wmfusercontent.org, DNS:wikipedia.org
+            X509v3 Extended Key Usage: 
+                TLS Web Server Authentication, TLS Web Client Authentication
+            X509v3 Subject Key Identifier: 
+                28:2A:26:2A:57:8B:3B:CE:B4:D6:AB:54:EF:D7:38:21:2C:49:5C:36
+            X509v3 Authority Key Identifier: 
+                keyid:96:DE:61:F1:BD:1C:16:29:53:1C:C0:CC:7D:3B:83:00:40:E6:1A:7C
+
+    Signature Algorithm: sha256WithRSAEncryption
+         8b:c3:ed:d1:9d:39:6f:af:40:72:bd:1e:18:5e:30:54:23:35:
+         ...
+</code></pre><p>上面这张证书就是 wikipedia.org 的终端用户证书了，看看几个关键的属性</p>
+<ol>
+<li>
+<p>Subject</p>
+<pre><code>Subject: C=US, ST=California, L=San Francisco, O=Wikimedia Foundation, Inc., CN=*.wikipedia.org
+</code></pre><p>可以看到该证书的主体结构，表示该证书的主体机构是 wikipedia.org，以及相关的一些附属信息，比如国家，地域，公司名称等等；</p>
+</li>
+<li>
+<p>Subject Alternative Name
+表述了该证书还可以用在哪些域名上，这里定义了好些其它的可用域名的验证上，</p>
+<pre><code>X509v3 Subject Alternative Name: 
+  DNS:*.wikipedia.org, DNS:*.m.mediawiki.org, DNS:*.m.wikibooks.org, DNS:*.m.wikidata.org, DNS:*.m.wikimedia.org, DNS:*.m.wikimediafoundation.org, DNS:*.m.wikinews.org, DNS:*.m.wikipedia.org, DNS:*.m.wikiquote.org, DNS:*.m.wikisource.org, DNS:*.m.wikiversity.org, DNS:*.m.wikivoyage.org, DNS:*.m.wiktionary.org, DNS:*.mediawiki.org, DNS:*.planet.wikimedia.org, DNS:*.wikibooks.org, DNS:*.wikidata.org, DNS:*.wikimedia.org, DNS:*.wikimediafoundation.org, DNS:*.wikinews.org, DNS:*.wikiquote.org, DNS:*.wikisource.org, DNS:*.wikiversity.org, DNS:*.wikivoyage.org, DNS:*.wiktionary.org, DNS:*.wmfusercontent.org, DNS:*.zero.wikipedia.org, DNS:mediawiki.org, DNS:w.wiki, DNS:wikibooks.org, DNS:wikidata.org, DNS:wikimedia.org, DNS:wikimediafoundation.org, DNS:wikinews.org, DNS:wikiquote.org, DNS:wikisource.org, DNS:wikiversity.org, DNS:wikivoyage.org, DNS:wiktionary.org, DNS:wmfusercontent.org, DNS:wikipedia.org
+</code></pre></li>
+<li>
+<p>Subject Public Key</p>
+<pre><code>Subject Public Key Info:
+    Public Key Algorithm: id-ecPublicKey
+        Public-Key: (256 bit)
+        pub: 
+            04:c9:22:69:31:8a:d6:6c:ea:da:c3:7f:2c:ac:a5:
+            af:c0:02:ea:81:cb:65:b9:fd:0c:6d:46:5b:c9:1e:
+            ed:b2:ac:2a:1b:4a:ec:80:7b:e7:1a:51:e0:df:f7:
+            c7:4a:20:7b:91:4b:20:07:21:ce:cf:68:65:8c:c6:
+            9d:3b:ef:d5:c1
+        ASN1 OID: prime256v1
+        NIST CURVE: P-256
+</code></pre><p>这就是终端用户的公钥信息了，注意，这里的公钥并不是采用的 RSA 算法，而是采用的 DSA 算法，具体可参考 <a href="https://en.wikipedia.org/wiki/ECDSA">ECDSA</a>；</p>
+</li>
+<li>
+<p>Signature Algorithm
+这部分内容表示所用的签名算法以及被 CA 中心签名后的内容，</p>
+<pre><code>Signature Algorithm: sha256WithRSAEncryption
+    8b:c3:ed:d1:9d:39:6f:af:40:72:bd:1e:18:5e:30:54:23:35:
+</code></pre><p>可以看到，该签名算法是采用的 SHA256 算法，并通过 RSA 加密(这里是通过 CA 的私钥加密)，所以这里得到的其实是被 CA 私钥加密后的 SHA 签名；后面对应 <em>8b:c3:ed:d1:9d:39:6f:af:40:72:bd:1e:18:5e:30:54:23:35:</em> 就是该加密后的签名；</p>
+</li>
+</ol>
+<p>从前面的系列文章 <a href="https://www.shangyang.me/2017/05/25/encrypt-rsa-pki/">RSA(五) PKI (Public Key Infrastructure) 公钥基础设施</a>我们知道，终端用户公钥签名是需要被相关的 CA 证书验证的(既是通过 CA 的公钥进行解密验证)；那么它是如何找到对应的 CA 证书并进行验证的呢？通过终端用户证书中的两个字段；</p>
+<ol>
+<li>
+<p>Issuer</p>
+<pre><code>Issuer: C=BE, O=GlobalSign nv-sa, CN=GlobalSign Organization Validation CA - SHA256 - G2
+</code></pre><p>可以明显的看到，该用户终端证书是由 <strong>GlobalSign</strong> 𝐶𝐴CA 中心进行验证并签发的。</p>
+</li>
+<li>
+<p>Authority Key Identifier</p>
+<pre><code>X509v3 Authority Key Identifier: 
+           keyid:96:DE:61:F1:BD:1C:16:29:53:1C:C0:CC:7D:3B:83:00:40:E6:1A:7C
+</code></pre><p>𝐶𝐴中心的身份 𝐼𝐷</p>
+</li>
+</ol>
+<p>那顾名思义，终端用户证书将会找到与 <em>Issuer</em> 和 <em>Authority Key Identifier</em> 两者都匹配的 𝐶𝐴 证书来对它进行验证；好了，接下来，我们看看 𝐶𝐴 证书长什么样，也就是 <em>Intermediate certificate</em>；</p>
+<h3 id="intermediate-certificate-既-ca-证书">Intermediate certificate 既 CA 证书</h3>
+<pre><code>Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            04:00:00:00:00:01:44:4e:f0:42:47
+    Signature Algorithm: sha256WithRSAEncryption
+        Issuer: C=BE, O=GlobalSign nv-sa, OU=Root CA, CN=GlobalSign Root CA
+        Validity
+            Not Before: Feb 20 10:00:00 2014 GMT
+            Not After : Feb 20 10:00:00 2024 GMT
+        Subject: C=BE, O=GlobalSign nv-sa, CN=GlobalSign Organization Validation CA - SHA256 - G2
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+                Modulus:
+                    00:c7:0e:6c:3f:23:93:7f:cc:70:a5:9d:20:c3:0e:
+                    ...
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Key Usage: critical
+                Certificate Sign, CRL Sign
+            X509v3 Basic Constraints: critical
+                CA:TRUE, pathlen:0
+            X509v3 Subject Key Identifier:
+                96:DE:61:F1:BD:1C:16:29:53:1C:C0:CC:7D:3B:83:00:40:E6:1A:7C
+            X509v3 Certificate Policies:
+                Policy: X509v3 Any Policy
+                  CPS: https://www.globalsign.com/repository/
+
+            X509v3 CRL Distribution Points:
+
+                Full Name:
+                  URI:http://crl.globalsign.net/root.crl
+
+            Authority Information Access:
+                OCSP - URI:http://ocsp.globalsign.com/rootr1
+
+            X509v3 Authority Key Identifier:
+                keyid:60:7B:66:1A:45:0D:97:CA:89:50:2F:7D:04:CD:34:A8:FF:FC:FD:4B
+
+    Signature Algorithm: sha256WithRSAEncryption
+         46:2a:ee:5e:bd:ae:01:60:37:31:11:86:71:74:b6:46:49:c8:
+         ...
+</code></pre><p><em>Intermidate certificate</em> 既是 𝐶𝐴 证书，是用来验证用户终端证书(既 <em>End-entity certificate</em>)的；通过两个字段来匹配用户终端证书，</p>
+<ul>
+<li>
+<p>𝐶𝐴 证书中的 <em>Issuer</em> 和用户终端证书中的 <em>Issuer</em> 相匹配</p>
+</li>
+<li>
+<p>𝐶𝐴</p>
+<p>证书中的</p>
+<p>Subject Key Identifier</p>
+<p>与用户终端证书中的</p>
+<p>Authority Key Identifier</p>
+<p>相匹配；</p>
+<pre><code>X509v3 Subject Key Identifier:
+              96:DE:61:F1:BD:1C:16:29:53:1C:C0:CC:7D:3B:83:00:40:E6:1A:7C
+</code></pre></li>
+</ul>
+<p>与 𝐶𝐴 证书相匹配的用户终端证书将会被该 𝐶𝐴 证书所验证；</p>
+<h3 id="root-certificate-既根证书">Root Certificate 既根证书</h3>
+<pre><code>Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            04:00:00:00:00:01:15:4b:5a:c3:94
+    Signature Algorithm: sha1WithRSAEncryption
+        Issuer: C=BE, O=GlobalSign nv-sa, OU=Root CA, CN=GlobalSign Root CA
+        Validity
+            Not Before: Sep  1 12:00:00 1998 GMT
+            Not After : Jan 28 12:00:00 2028 GMT
+        Subject: C=BE, O=GlobalSign nv-sa, OU=Root CA, CN=GlobalSign Root CA
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+                Modulus:
+                    00:da:0e:e6:99:8d:ce:a3:e3:4f:8a:7e:fb:f1:8b:
+                    ...
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Key Usage: critical
+                Certificate Sign, CRL Sign
+            X509v3 Basic Constraints: critical
+                CA:TRUE
+            X509v3 Subject Key Identifier: 
+                60:7B:66:1A:45:0D:97:CA:89:50:2F:7D:04:CD:34:A8:FF:FC:FD:4B
+    Signature Algorithm: sha1WithRSAEncryption
+         d6:73:e7:7c:4f:76:d0:8d:bf:ec:ba:a2:be:34:c5:28:32:b5:
+         ...
+</code></pre><p><em>Intermediate certificate</em> 既是 𝐶𝐴 证书将会被 <em>Root certificate</em> 进行验证，并且 <em>Root certificate</em> 是证书验证链中的最后一环，所以的验证将会到此为止；那么 𝐶𝐴 证书又是如何找到对应的 <em>Root certificate</em> 进行验证的呢？主要通过如下的规则进行匹配</p>
+<ol>
+<li>𝐶𝐴 证书中的 <em>Issuer</em> 需要与 <em>Root certificate</em> 中的 <em>Issuer</em> 匹配</li>
+<li>𝐶𝐴 证书中的 <em>Authority Key Identifier</em> 字段需要与 <em>Root certificate</em> 证书中的 <em>Subject Key Identifier</em> 字段相匹配</li>
+</ol>
+<p>这样，与之匹配的 𝐶𝐴 证书将会由该 <em>Root certificate</em> 证书进行验证；</p>
+<p>最后，需要强调的是，𝐶𝐴 证书并不会随浏览器和系统的安装而预安装到用户的设备上，<code>被预安装到用户设备上的只有 Root certificate</code>；这样呢，就保证了终端用户的公钥的可靠性和安全性；另外，通过 <em>Root certificate</em> 会被安装到系统的 <a href="https://en.wikipedia.org/wiki/Public_key_certificate#Root_programs">trust store</a>中，主流的有</p>
+<ul>
+<li><a href="https://technet.microsoft.com/en-us/library/cc751157.aspx">Microsoft Root Program</a></li>
+<li><a href="https://www.apple.com/certificateauthority/ca_program.html">Apple Root Program</a></li>
+<li><a href="https://www.mozilla.org/en-US/about/governance/policies/security-group/certs/policy/">Mozilla Root Program</a></li>
+<li><a href="http://www.oracle.com/technetwork/java/javase/javasecarootcertsprogram-1876540.html">Oracle Java root program</a></li>
+<li>Adobe <a href="https://helpx.adobe.com/acrobat/kb/approved-trust-list2.html">AATL</a> and <a href="https://blogs.adobe.com/documentcloud/eu-trusted-list-now-available-in-adobe-acrobat/">EUTL</a> root programs (used for document signing)</li>
+</ul>
+<p>后续有时间的话，准备对 Java 的 trust store 进行一下梳理和介绍；</p>
+<h2 id="证书链的验证过程">证书链的验证过程</h2>
+<p>有了上述分析以后，证书链的验证过程就显而易见了</p>
+<ul>
+<li>End-user certificate 通过 𝐶𝐴 证书进行验证</li>
+<li>𝐶𝐴 证书经过 Root certificate 证书进行验证</li>
+<li>完毕</li>
+</ul>
+<h1 id="实践">实践</h1>
+<p>那么这里作者带领大家通过 CSR 的方式申请一个免费的 CA 证书，现在通过阿里云可以免费申请一个固定域名的 Symantec 的 CA 证书；</p>
+<ol>
+<li>
+<p>登录阿里云产品中心，选择安全 -&gt; CA 证书<img src="https://www.shangyang.me/2017/05/27/encrypt-rsa-x509/apply-ca-how-step-1.png" alt="img"></p>
+</li>
+<li>
+<p>然后选择免费的 DV 类型的证书<img src="https://www.shangyang.me/2017/05/27/encrypt-rsa-x509/apply-ca-how-step-2.png" alt="img"></p>
+</li>
+<li>
+<p>购买好了以后，进入管理后台管理，进入安全（云盾）-&gt; 证书服务，然后对证书进行补全<img src="https://www.shangyang.me/2017/05/27/encrypt-rsa-x509/apply-ca-how-step-3.png" alt="img">补全既是需要用户自己提交 CSR 申请证书；</p>
+</li>
+<li>
+<p>填写域名信息，注意，这里只能绑定一个唯一的域名，且不能写任何的通配符<img src="https://www.shangyang.me/2017/05/27/encrypt-rsa-x509/apply-ca-how-step-4.png" alt="img"></p>
+</li>
+<li>
+<p>下一步将会填写一些个人信息，比如姓名、手机号码、地址等<img src="https://www.shangyang.me/2017/05/27/encrypt-rsa-x509/apply-ca-how-step-5.png" alt="img">这里要强调的是，阿里云需要验证域名的归属，既验证该域名的确归你所有；可以通过 DNS 和 文件 的两种方式进行验证；这里呢，我选择的是通过 DNS 验证，验证的大致过程是，阿里会向你的申请邮箱中发送一份邮件，邮件的内容中包含了如何验证域名的方法，里面包含一条用于验证的 TXT 记录，这个需要到个人域名管理中心去配置 TXT 转发规则即可；</p>
+</li>
+<li>
+<p>好了，这一步是关键了，这里有两个选项，由系统生成 CSR 或者自己生成 CSR，这里为了演示自提交 CSR 证书申请的方式，所以，我们选择自己生成 CSR<img src="https://www.shangyang.me/2017/05/27/encrypt-rsa-x509/apply-ca-how-step-6.png" alt="img"></p>
+</li>
+<li>
+<p>使用 openssl 命令生成 CSR</p>
+<pre><code>$ openssl req -out CSR.csr -new -newkey rsa:2048 -nodes -keyout private.key
+</code></pre><p>然后提示输入国家、地址、姓名、域名、邮箱等等信息；如果是为公司申请邮箱，那么这里填写公司相关信息即可；这里<code>尤其</code>要<code>注意</code>的是，在输入域名的时候，必须与第 4 步的域名相匹配，否则第 9 步审核不能通过，输入域名的时候，提示输入 <em>Common Name (e.g. server FQDN or YOUR name) []</em> 的信息；最后会在本地生成两个文件，CSR.csr 和 private.key</p>
+</li>
+<li>
+<p>用文本编辑器打开 CSR.csr，可以看到大致内容如下</p>
+<pre><code>-----BEGIN CERTIFICATE REQUEST-----
+MIIC3DCCAcQCAQAwgZYxCzAJBgNVBAYTAkNOMRAwDgYDVQQIEwdTaWNodWFuMRAw
+DgYDVQQHEwdDaGVuZ2R1MRQwEgYDVQQKEwtIdWlSb25nWGluZzEUMBIGA1UECxML
+SHVpUm9uZ1hpbmcxFDASBgNVBAMTC0h1aVJvbmdYaW5nMSEwHwYJKoZIhvcNAQkB
+FhJodWlyb25neGluZ0BocnguYWkwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+AoIBAQC7MY7hTjbv7DkGoDTmvQ2toAe8nMTlQGPh+r4VvD+zzEiEudFPEI1cIFLr
+BLTfSyn9Awv7lgIjhJ4ghDkjAGwHnrTxzvldjfZkpKuBK9H8Vy2t7sorgoxEBF7j
+VbiiTBtSG6+ZNw8esqt5EECT19aP/RyJp65f8lysHwcHmZmVGaDq/VwQcbyuI6Vs
+ko/7sSchOAgUWn66oS+xw7mGYR212mQv6Bz0g0L1NVep8Doz8O2pWPHT1ZOdpBDU
+rzJJxHXzUgKVgYsAgMBAAGgADANBgkqhkiG9w0BAQUFAAOCAQEA
+V6rSXeGO4Z0q2sZ9gbdUBmpQ8AAdloByhd1BcwHuHt/nfPj59L3CT3EnTEez7cDt
+RUCbI2FbThBFfjngfTNE3PjsTsheCdAxoV6yRPo7Fpb5AKkhXDra1jjVjsY0maFl
+N23okpDCMzmUD2peKqumYhdHBw8wB3Y5HZQxxq688DwlHn0bLnylUPk/hDfuMzIs
+5vLIyDSGQiCwq9sU8wjhQOXqzZ37FgJcZ8GyvaJ3kUWDlLDPIGMiXQ0p4T39/ZaE
+my/C0JxSLiAKJs3L2f7HfKwUoRZDDnCS0WMdQunvxC4Dd7hyddCij6E1ExnT7EzC
+kiPq8xiGl2HRGW/JfWC3XA==
+-----END CERTIFICATE REQUEST-----
+</code></pre><p>可以看到，是一个经过 Base64 编码的 PEM 格式的内容；</p>
+</li>
+<li>
+<p>将上述内容复制，粘贴到阿里证书服务页面，点击保存<img src="https://www.shangyang.me/2017/05/27/encrypt-rsa-x509/apply-ca-how-step-7.png" alt="img">注意第 7 步的描述，必须保证 CSR 中的域名地址与第 4 步申请的时候填写的域名地址相匹配才行；</p>
+</li>
+<li>
+<p>验证域名的归属
+由于第 5 步中，作者是选择的 DNS 验证的方式，所以，第 9 步完成以后，阿里会发送一封邮件包含需要验证的 TXT 记录值，这里只需要到域名管理中心配置一下 TXT 值，即可验证通过；域名管理中心配置好了以后，大致内容如下，<img src="https://www.shangyang.me/2017/05/27/encrypt-rsa-x509/apply-ca-how-step-9.png" alt="img">不过，有时候，邮件迟迟不发送，这个时候，你可以直接点击<code>进度</code>按钮，也可以显示相关的 TXT 记录；<img src="https://www.shangyang.me/2017/05/27/encrypt-rsa-x509/apply-ca-how-step-8.png" alt="img"></p>
+</li>
+<li>
+<p>申请成功，当验证通过以后，状态便会变为<code>已签发</code><img src="https://www.shangyang.me/2017/05/27/encrypt-rsa-x509/apply-ca-how-step-10.png" alt="img">这个时候，你就可以在证书管理后台中去下载该 CA 证书了..</p>
+</li>
+</ol>
+<p>All done…</p>
+<p>后记于 2018-01-30 1:21 pm
+阿里云上验证域名归属的步骤有变化，也就是上面的第 10 步，在添加主机记录的时候前面要加上 _dnsauth 前缀才行，如图
+<img src="https://www.shangyang.me/2017/05/27/encrypt-rsa-x509/apply-ca-how-step-10-2.png" alt="apply-ca-how-step-10-2.png">
+并且不再发邮件提示配置知己记录 TXT 值了；对应的域名配置如下，
+<img src="https://www.shangyang.me/2017/05/27/encrypt-rsa-x509/apply-ca-how-step-10-3.png" alt="apply-ca-how-step-10-3.png"></p>
+<p>更多详情参考 <a href="https://bbs.aliyun.com/read/573056.html?spm=a2c4e.11155515.0.0.kL3FVf">https://bbs.aliyun.com/read/573056.html?spm=a2c4e.11155515.0.0.kL3FVf</a></p>
+<h1 id="后续">后续</h1>
+<p>这里主要讲解的是通过 𝐶𝐴 签名的证书，那如果，只是内网服务器，不需要连接外网，那么，实际上，我也就用不到这种公共的基础设施来保证我的证书的合法性；这个时候，X.509 证书还提供了一种自签名证书，什么意思呢？就是说，你可以自己生成 <em>Root certificate</em>，然后将它加入你本机的 trust store 中，用它来验证你的证书的合法性，这就是自签名证书了；详情参考</p>
+]]></content>
+		</item>
+		
+		<item>
+			<title>RSA(五) PKI (Public Key Infrastructure) 公钥基础设施</title>
+			<link>https://roninzc.github.io/posts/rsa/rsa%E4%BA%94-pki-public-key-infrastructure-%E5%85%AC%E9%92%A5%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/</link>
+			<pubDate>Wed, 03 Mar 2021 13:45:25 +0800</pubDate>
+			
+			<guid>https://roninzc.github.io/posts/rsa/rsa%E4%BA%94-pki-public-key-infrastructure-%E5%85%AC%E9%92%A5%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/</guid>
+			<description>前言 在上一篇《RSA(四) 签名 Signature》章节签名 Signature 中提到，要使用签名(Signature)机制来保证信息再传递过程中没有被第三方所篡改，有一个前提，就是必须保证，在公钥的传递过程中不被他人篡改，否则，整个签名机制就形同一张白纸，毫无用处；那么又该如何保证公钥的合法性，保证公钥本身没有被篡改过呢？这就是 PKI 公钥基础设施要完成的工作和达到的目的；
+备注，本文是作者的原创作品，转载请注明出处。
+ 转载至https://www.shangyang.me/2017/05/25/encrypt-rsa-pki/
+ 公钥被篡改 首先，我们来看看，在通讯过程中，公钥是如何被他人所篡改的？也就是 Man in Middle Attack 是怎么做到的？
+先来看一个正常的，通过公钥和私钥加密通讯的场景，
+服务器端生成公钥和私钥，并将公钥通过网络发送给客户端，客户端使用公钥加密 DES 对称加密密钥，然后将 DES 密钥发送给服务器端，之后，双方便可以进行加密通讯了；备注，这也是基于 RSA 加密通讯的基础；但是，这样做，并不可靠，下面我们再来看一个公钥被挟持并被篡改的场景；
+这次通讯的时候，不幸的是，客户端与服务器通讯的时候，正好经过了一个黑客的路由器，通过网络嗅探，它截获了服务器所发送的公钥，并利用自己的私钥，生成了一个新的公钥，并替代原有的公钥并将这个新的公钥发送给了客户端，这个过程就是公钥被截获，被篡改的过程；而后，客户端将使用被篡改过后的公钥进行加密通讯，所以，凡是经过客户端加密的信息，全部可以被黑客的私钥解密，也就导致了，加密通讯彻底失效；正是在这种背景之下，PKI (Public Key Infrasture) 公钥基础设施孕育而生；
+后记，发现还漏了一环，首先要知道的是，当通过 RSA 建立好 SSL 通讯通道以后，实际上，为了效率，该通道上数据实际上是通过对称加密密钥 AES 进行加密传输的，所以，能否保证数据通讯的安全性的重中之重的环节就是保证 AES 密钥在传输过程中的安全性，正如上图所描述的那样，当黑客截获到加密后的 AES 密钥以后，首先需要通过黑客自己的私钥对其解密，然后再通过黑客所截获的服务器的公钥对该 AES 密钥进行加密，然后再传输给服务器端，如果不这样做的话，服务器是无法通过它自己的私钥解密出 AES 密钥的；（后记于 2018-01-30 10:45AM）
+PKI PKI 的核心职责就是通过一些列的措施保证公钥的合法性，那么它是如何保证公钥不被篡改，是合法的呢？
+如何保证公钥不被篡改的 比如 Alice 通过 RSA 生成了公钥 𝐾𝑝Kp 和密钥 𝐾𝑠Ks，她需要与 Bob 进行网络通讯，而且她必须通过网络将公钥 𝐾𝑝Kp 发送给 Bob；那么 PKI 是如何保证此公钥 𝐾𝑝Kp 在传输过程中不被篡改的呢？</description>
+			<content type="html"><![CDATA[<h1 id="前言">前言</h1>
+<p>在上一篇《<a href="https://www.shangyang.me/2017/05/24/encrypt-rsa-signature/">RSA(四) 签名 Signature</a>》章节<a href="https://www.shangyang.me/2017/05/24/encrypt-rsa-signature/#%E7%AD%BE%E5%90%8D-Signature">签名 Signature</a> 中提到，要使用签名(Signature)机制来保证信息再传递过程中没有被第三方所篡改，有一个前提，就是必须保证，在公钥的传递过程中不被他人篡改，否则，整个签名机制就形同一张白纸，毫无用处；那么又该如何保证公钥的合法性，保证公钥本身没有被篡改过呢？这就是 PKI 公钥基础设施要完成的工作和达到的目的；</p>
+<p>备注，本文是作者的原创作品，转载请注明出处。</p>
+<blockquote>
+<p>转载至<code>https://www.shangyang.me/2017/05/25/encrypt-rsa-pki/</code></p>
+</blockquote>
+<h1 id="公钥被篡改">公钥被篡改</h1>
+<p>首先，我们来看看，在通讯过程中，公钥是如何被他人所篡改的？也就是 Man in Middle Attack 是怎么做到的？</p>
+<p>先来看一个正常的，通过公钥和私钥加密通讯的场景，</p>
+<p><img src="https://www.shangyang.me/2017/05/25/encrypt-rsa-pki/security-communicate-with-rsa.png" alt="img"></p>
+<p>服务器端生成公钥和私钥，并将公钥通过网络发送给客户端，客户端使用公钥加密 DES 对称加密密钥，然后将 DES 密钥发送给服务器端，之后，双方便可以进行加密通讯了；备注，这也是基于 RSA 加密通讯的基础；但是，这样做，并不可靠，下面我们再来看一个公钥被挟持并被篡改的场景；</p>
+<p><img src="https://www.shangyang.me/2017/05/25/encrypt-rsa-pki/security-communicate-with-rsa-tamper.png" alt="img"></p>
+<p>这次通讯的时候，不幸的是，客户端与服务器通讯的时候，正好经过了一个黑客的路由器，通过网络嗅探，它截获了服务器所发送的公钥，并利用自己的私钥，生成了一个新的公钥，并替代原有的公钥并将这个新的公钥发送给了客户端，这个过程就是公钥被截获，被篡改的过程；而后，客户端将使用被篡改过后的公钥进行加密通讯，所以，凡是经过客户端加密的信息，全部可以被黑客的私钥解密，也就导致了，加密通讯<code>彻底失效</code>；正是在这种背景之下，PKI (Public Key Infrasture) 公钥基础设施孕育而生；</p>
+<p>后记，发现还漏了一环，首先要知道的是，当通过 RSA 建立好 SSL 通讯通道以后，实际上，为了效率，该通道上数据实际上是通过对称加密密钥 AES 进行加密传输的，所以，能否保证数据通讯的安全性的重中之重的环节就是保证 AES 密钥在传输过程中的安全性，正如上图所描述的那样，当黑客截获到加密后的 AES 密钥以后，首先需要通过黑客自己的私钥对其解密，然后再通过黑客所截获的服务器的公钥对该 AES 密钥进行加密，然后再传输给服务器端，如果不这样做的话，服务器是无法通过它自己的私钥解密出 AES 密钥的；（后记于 2018-01-30 10:45AM）</p>
+<h1 id="pki">PKI</h1>
+<p>PKI 的核心职责就是通过一些列的措施保证公钥的合法性，那么它是如何保证公钥不被篡改，是合法的呢？</p>
+<h2 id="如何保证公钥不被篡改的">如何保证公钥不被篡改的</h2>
+<p>比如 Alice 通过 RSA 生成了公钥 𝐾𝑝Kp 和密钥 𝐾𝑠Ks，她需要与 Bob 进行网络通讯，而且她必须通过网络将公钥 𝐾𝑝Kp 发送给 Bob；那么 PKI 是如何保证此公钥 𝐾𝑝Kp 在传输过程中不被篡改的呢？</p>
+<p>简而言之，PKI 的策略就是通过一个第三方机构 𝑀M，该机构 𝑀M 也有自己的公钥 𝐾𝑝(𝑚)Kp(m) 和密钥 𝐾𝑠(𝑚)Ks(m)；</p>
+<p><strong>首先通过该机构 𝑀M 进行如下的操作，</strong></p>
+<ol>
+<li>Alice 将自己的公钥 𝐾𝑝Kp 提交给 𝑀M；</li>
+<li>𝑀M 使用签名算法，比如 MD5，对 Alice 的原生公钥 𝐾𝑝Kp 进行签名得到 𝑆𝑝Sp；</li>
+<li>然后再通过 𝐾𝑠(𝑚)Ks(m) 对 𝑆𝑝Sp 进行加密得到加密后的签名 𝐸𝑠𝑝Esp；</li>
+<li>最后将 𝐸𝑠𝑝Esp 颁发给 Alice；</li>
+</ol>
+<p><strong>Alice 如何将公钥发送给 Bob？</strong></p>
+<ul>
+<li>Alice 将加密后的签名 𝐸𝑠𝑝Esp 和公钥 𝐾𝑝Kp 一起发送给 Bob；
+备注，其实签名 𝐸𝑠𝑝Esp 和公钥 𝐾𝑝Kp 被纳入一张<code>证书</code>(Certificate)中，Alice 发送给 Bob 的其实就是这么一张证书；但是，整整 X.509 证书包含的内容比这个复杂许多，不过概念上是等价的；这里，也就是证书的由来了。不仅要知其然，更要知其所以然..</li>
+</ul>
+<p><strong>Bob 如何保证接收到的 Alice 的公钥没有被篡改过？</strong></p>
+<p>Bob 拿到 Alice 的证书以后，做如下操作，(为了区分，这里将传输过程中 Alice 的公钥命名为 𝐾′𝑝Kp′)</p>
+<ol>
+<li>通过 𝑀M 的公钥 𝐾𝑝(𝑚)Kp(m) 对 𝐸𝑠𝑝Esp 进行解密，得到 𝑆𝑝Sp；
+注意，如果 𝐸𝑠𝑝Esp 被篡改了，这里是无法解密得到 𝑆𝑝Sp，也就是说，要保证解密成功，𝐸𝑠𝑝Esp 一定是没有被篡改过的；</li>
+<li>然后使用双方所约定好的签名算法，比如 MD5，对 𝐾′𝑝Kp′ 进行签名，得到 𝑆′𝑝Sp′</li>
+<li>最后比较 𝑆𝑝Sp 与 𝑆′𝑝Sp′ 是否相等，若相等，则表示发送过程中的公钥 𝐾′𝑝Kp′ 没有被篡改过，否则，则可以断言，𝐾′𝑝Kp′ 被篡改过，于是整个通讯不安全、不可靠；</li>
+</ol>
+<p>（备注，这里的机构 𝑀M 有个行业用语叫做 𝐶𝐴CA 既是 <em>Certification Authority</em>；）</p>
+<p>等等，第三方机构 CA，在 Bob 端使用 CA 的公钥 𝐾𝑝(𝑐𝑎)Kp(ca) 对 𝐸𝑠𝑝Esp 进行解密，得到签名 𝑆𝑝Sp，那如果 CA 的公钥 𝐾𝑝(𝑐𝑎)Kp(ca) 在传输过程中也被篡改了呢？好问题，第三方机构 CA 自身如何保证其公钥的合法性？如果不能保证 CA 公钥的合法性，上述基于签名保证 Alice 公钥合法性的措施也就是是一纸空谈。</p>
+<p><strong>那么，CA 又是如何保证自己的公钥的合法性的呢？</strong></p>
+<p>这里将谈到的就是 KPI 的又一大特征，基础设施；</p>
+<p>为了保证 CA 公钥的合法性，通常，CA 机构的公钥是随系统、浏览器等<code>预安装</code>到客户电脑上的，也就是说，你在装系统的时候，或者在安装浏览器的时候，CA 机构的公钥(一般是包含在 CA 证书中的) 被预装到了你的系统或者是浏览器中了；这样，黑客就没有办法通过网络拦截的办法去篡改 CA 机构的公钥了；这也就是<code>基础设施</code>命名的由来，既 <em>Infrastructure</em>；这样，也就保证了通过 CA 机构签名的证书即使是在不安全的网络环境中传播，依然是<code>可靠并且是有效的</code>；</p>
+<h2 id="概念流程图">概念流程图</h2>
+<p>真实过程中，用户是通过 𝐶𝑆𝑅CSR 证书向 𝐶𝐴CA 机构申请 𝑋.509X.509 证书，申请过程中会包含申请者的地址，单位，邮箱等信息，比下图要复杂；这里，主要是化繁为简，通过如下的概念图，将其核心逻辑阐述清楚，下面的逻辑流程图一一对应<a href="https://www.shangyang.me/2017/05/25/encrypt-rsa-pki/#%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E5%85%AC%E9%92%A5%E4%B8%8D%E8%A2%AB%E7%AF%A1%E6%94%B9%E7%9A%84">如何保证公钥不被篡改的</a>中所描述的步骤；</p>
+<p><img src="https://www.shangyang.me/2017/05/25/encrypt-rsa-pki/sequence.png" alt="img"></p>
+<p>注意两个关键步骤</p>
+<ul>
+<li><em>Step 6.1.1</em>: 断定签名 𝐸𝑠𝑝Esp 被篡改过；
+要能够断定这种情况，保证 𝐸𝑠𝑝Esp 一定没有被篡改过，需要公钥基础设施(既 PKI )的保证，保证签名颁发机构 𝑀M 的公钥是无法被篡改的</li>
+<li><em>Step 8.1</em>: 𝑆𝑝!=𝑆′𝑝Sp!=Sp′，则可以断定公钥是被篡改过得；
+这里面更深层次的原因是，通过公钥认证机构得到的签名 𝑆𝑝Sp 与 Bob 自己得到的公钥签名 𝑆𝑝Sp 不匹配，则可断定，Alice 的公钥 𝐾𝑝Kp 被篡改过；</li>
+</ul>
+<h2 id="kpi-包含哪些元素">KPI 包含哪些元素</h2>
+<p>在章节<a href="https://www.shangyang.me/2017/05/25/encrypt-rsa-pki/#%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E5%85%AC%E9%92%A5%E4%B8%8D%E8%A2%AB%E7%AF%A1%E6%94%B9%E7%9A%84">如何保证公钥不被篡改的</a>中，作者用最通俗易懂的言语描述了 KPI 公钥基础设施是如何保证公钥的合法性的，以及其重要性；不过，在官方定义中，严格的定义了如下的角色，</p>
+<ol>
+<li>
+<p>CA (Certificate Authority)，证书认证机构
+对公钥、用户身份信息、域名等信息进行签名，生成相关的电子证书；并将电子证书颁发给申请用户；
+另外还会通过其专有的协议来判断证书是否有效（是否超过使用有效期）,如果证书失效，将会生成证书回收列表既是 certificate revocation list ，该部分内容涉及到 Authority revocation lists 的相关内容，从 <a href="https://en.wikipedia.org/wiki/Certificate_authority">https://en.wikipedia.org/wiki/Certificate_authority</a> 摘要其核心内容如下，</p>
+<blockquote>
+<p>An authority revocation list (ARL) is a form of certificate revocation list (CRL) containing certificates issued to certificate authorities, contrary to CRLs which contain revoked end-entity certificates.</p>
+</blockquote>
+<p><a href="https://tools.ietf.org/html/rfc5280#section-4.1.2.6">https://tools.ietf.org/html/rfc5280#section-4.1.2.6</a> 标注中也描述了有关 CRL 协议和标准；</p>
+</li>
+<li>
+<p>RA (Registration Authority)，注册认证机构
+看下 <a href="https://en.wikipedia.org/wiki/Public_key_infrastructure">https://en.wikipedia.org/wiki/Public_key_infrastructure</a> 中的描述，</p>
+<blockquote>
+<p>A registration authority which verifies the identity of entities requesting their digital certificates to be stored at the CA</p>
+</blockquote>
+<p>是用来验证证书申请机构的身份的；不过现在 CA 和 RA 并没有完全区分，往往两者表示同一个角色；
+用户需要像该机构提交一张 CSR 格式的证书(该证书的后缀名为 <em>.csr</em>)，既是 <a href="https://en.wikipedia.org/wiki/Certificate_signing_request">certificate signing request</a> 来申请，里面需要填写诸如你的域名，公司名，部门名称，城市名，地区名，国家名，电子邮件等等证明你身份的信息；</p>
+</li>
+</ol>
+<p>从 #1 中，我们知道，CA 不但会对用户的身份信息以及公钥进行签名，而且会生成相应的电子证书来保存这些签名信息，最终将该证书颁发给用户；而事实上，该电子证书经过数个版本的变化，现在已经形成了一个事实标准，那就是 <em>X.509 证书</em>；作者会在后续的文章中对其进行详细的介绍；</p>
+<h3 id="ca-机构">CA 机构</h3>
+<p>这里描述一下国际知名的 CA 机构有哪些，</p>
+<p>如下内容可以从 <a href="https://en.wikipedia.org/wiki/Certificate_authority">https://en.wikipedia.org/wiki/Certificate_authority</a> 获得</p>
+<p><img src="https://www.shangyang.me/2017/05/25/encrypt-rsa-pki/famous-ca-list.png" alt="img"></p>
+]]></content>
+		</item>
+		
+		<item>
+			<title>RSA(四) 签名 Signature</title>
+			<link>https://roninzc.github.io/posts/rsa/rsa%E5%9B%9B-%E7%AD%BE%E5%90%8D-signature/</link>
+			<pubDate>Wed, 03 Mar 2021 13:44:25 +0800</pubDate>
+			
+			<guid>https://roninzc.github.io/posts/rsa/rsa%E5%9B%9B-%E7%AD%BE%E5%90%8D-signature/</guid>
+			<description>前言 由RSA(一) 背后的数学原理可知，RSA 既公钥加密技术主要是通过私钥加密信息，然后由公钥来解密信息；但是，从 RSA 的数学原理中我们可以知道，其实私钥加密信息，然后用公钥来解密也是可以的；而因为公钥是公开的，私钥加密的东西谁都可以进行解密，那这样做有什么意义呢？本章节就是来探讨这样做的意义何在？一句话概括，它的意义就在于签名( sign )；
+备注，本文是作者的原创作品，转载请注明出处。
+ 转载至https://www.shangyang.me/2017/05/24/encrypt-rsa-signature/
+ 场景 来看这样一个场景，Bob 给股票经纪人 Alice 发送了一封邮件，让 Alice 帮他大量购买某支股票；可是刚买不久，股票就大跌，于是 Bob 转而否认发过那封邮件，声称那封邮件是伪造的；那么作为法官的你，如何来验证之前发送的那封邮件到底是不是 Bob 发送的呢？
+要解决上述场景的问题，就需要使用到 RSA 签名技术了；
+签名 Signature 为保证邮件是 Bob 发送的，在邮件收发协议上做了如下的操作约定，
+ 首先双方通过邮件协议约定好签名的算法，比如都是用 MD5 或者是其它签名算法。 Bob 在发送邮件的同时，邮件系统将做如下的操作  通过签名算法 MD5 将邮件内容c进行 hash，得到邮件内容的签名(Sign)，记为 𝑆1； 通过 Bob 的私钥 𝑃 对 𝑆1 进行加密，得到加密后邮件内容的签名(Encrypted Sign)，记为 𝑆1𝑒； 最后，Bob 通过邮箱系统将签名 𝑆1𝑒S1e，邮件内容c，以及 Bob 的公钥 𝑃 三部分内容发送给 Alice； 如何保证公钥的安全性和可靠性，不在本文涉及；   Alice 收到 Bob 的邮件以后，邮箱系统会做如下的操作  使用 Bob 的公钥对 𝑆1𝑒 进行解密，得到 𝑆1； 使用双方事先约定好的签名算法 MD5 对c进行 hash 得到签名 𝑆2； 比较签名 𝑆1 和签名 𝑆2 是否相等 如果相等，则表示邮件内容没有被篡改； 如果不相等，则表示邮件内容被他人篡改；    不过，要保证信息的确没有被篡改，还有一条基本原则，就是 Bob 的公钥 𝑃 不能被篡改，如果公钥 𝑃 在 Bob 发送给 Alice 的过程被人篡改了，那么 Attacker 就可以自己杜撰一封邮件，并通过自己的私钥签名邮件，并将自己篡改后的公钥 𝑃𝑐Pc 一同发送给 Alice，那么这个时候，Alice 是没有办法确认邮件是否是被篡改过的；所以，用 RSA 签名的方式来保证信息没有被篡改过，一个基本的前提就是 Bob 的公钥 𝑃P 不能被第三方篡改；而要保证公钥不能被第三方篡改，就需要 PKI (Public Key Infrasture) 公钥基础设施来保证公钥的合法性，涉及到 CA，Root Certificate 根证书相关知识；这部分知识不打算在本文进行描述；相关内容参考 RSA(五) PKI (Public Key Infrastructure) 公钥基础设施；</description>
+			<content type="html"><![CDATA[<h1 id="前言">前言</h1>
+<p>由<a href="https://www.shangyang.me/2017/05/19/encrypt-rsa-math/">RSA(一) 背后的数学原理</a>可知，RSA 既公钥加密技术主要是通过私钥加密信息，然后由公钥来解密信息；但是，从 RSA 的数学原理中我们可以知道，其实私钥加密信息，然后用公钥来解密也是可以的；而因为公钥是公开的，私钥加密的东西谁都可以进行解密，那这样做有什么意义呢？本章节就是来探讨这样做的意义何在？一句话概括，它的意义就在于签名( sign )；</p>
+<p>备注，本文是作者的原创作品，转载请注明出处。</p>
+<blockquote>
+<p>转载至<code>https://www.shangyang.me/2017/05/24/encrypt-rsa-signature/</code></p>
+</blockquote>
+<h1 id="场景">场景</h1>
+<p>来看这样一个场景，Bob 给股票经纪人 Alice 发送了一封邮件，让 Alice 帮他大量购买某支股票；可是刚买不久，股票就大跌，于是 Bob 转而否认发过那封邮件，声称那封邮件是伪造的；那么作为法官的你，如何来验证之前发送的那封邮件到底是不是 Bob 发送的呢？</p>
+<p>要解决上述场景的问题，就需要使用到 RSA 签名技术了；</p>
+<h1 id="签名-signature">签名 Signature</h1>
+<p>为保证邮件是 Bob 发送的，在邮件收发协议上做了如下的操作约定，</p>
+<ol>
+<li>首先双方通过邮件协议约定好签名的算法，比如都是用 MD5 或者是其它签名算法。</li>
+<li>Bob 在发送邮件的同时，邮件系统将做如下的操作
+<ul>
+<li>通过签名算法 MD5 将邮件内容<code>c</code>进行 <em>hash</em>，得到邮件内容的签名(Sign)，记为 𝑆1；</li>
+<li>通过 Bob 的私钥 𝑃 对 𝑆1 进行加密，得到加密后邮件内容的签名(Encrypted Sign)，记为 𝑆1𝑒；</li>
+<li>最后，Bob 通过邮箱系统将签名 𝑆1𝑒S1e，邮件内容<code>c</code>，以及 Bob 的公钥 𝑃 三部分内容发送给 Alice；
+如何保证公钥的安全性和可靠性，不在本文涉及；</li>
+</ul>
+</li>
+<li>Alice 收到 Bob 的邮件以后，邮箱系统会做如下的操作
+<ul>
+<li>使用 Bob 的公钥对 𝑆1𝑒 进行解密，得到 𝑆1；</li>
+<li>使用双方事先约定好的签名算法 MD5 对<code>c</code>进行 <em>hash</em> 得到签名 𝑆2；</li>
+<li>比较签名 𝑆1 和签名 𝑆2 是否相等
+如果相等，则表示邮件内容没有被篡改；
+如果不相等，则表示邮件内容被他人篡改；</li>
+</ul>
+</li>
+</ol>
+<p>不过，要保证信息的确没有被篡改，还有一条基本原则，就是 Bob 的公钥 𝑃 不能被篡改，如果公钥 𝑃 在 Bob 发送给 Alice 的过程被人篡改了，那么 Attacker 就可以自己杜撰一封邮件，并通过自己的私钥签名邮件，并将自己篡改后的公钥 𝑃𝑐Pc 一同发送给 Alice，那么这个时候，Alice 是没有办法确认邮件是否是被篡改过的；所以，用 RSA 签名的方式来保证信息没有被篡改过，一个基本的前提就是 Bob 的公钥 𝑃P 不能被第三方篡改；而要保证公钥不能被第三方篡改，就需要 PKI (Public Key Infrasture) 公钥基础设施来保证公钥的合法性，涉及到 CA，Root Certificate 根证书相关知识；这部分知识不打算在本文进行描述；相关内容参考 <a href="https://www.shangyang.me/2017/05/25/encrypt-rsa-pki/">RSA(五) PKI (Public Key Infrastructure) 公钥基础设施</a>；</p>
+<p>备注：Root Certificate 根证书就是 CA 证书认证机构用来签名验证公钥 𝑃 的；</p>
+<h1 id="总结">总结</h1>
+<p><a href="https://www.shangyang.me/2017/05/24/encrypt-rsa-signature/#%E7%AD%BE%E5%90%8D-sign">签名 sign</a> 小节中详细的描述了 RSA 通过私钥签名的过程和作用；但是也知道，签名若要能起作用，必须借助 PKI 公钥基础设施来保证公钥的合法性；所以，可见，PKI 对于基于 RSA 的加密通讯协议起到至关重要的作用，没有它，一切基于 RSA 的加密通讯理论都白搭；后续章节，让我们来看看 PKI 是什么东西；</p>
+]]></content>
+		</item>
+		
+		<item>
+			<title>RSA(三) 密钥的格式</title>
+			<link>https://roninzc.github.io/posts/rsa/rsa%E4%B8%89-%E5%AF%86%E9%92%A5%E7%9A%84%E6%A0%BC%E5%BC%8F/</link>
+			<pubDate>Wed, 03 Mar 2021 13:43:25 +0800</pubDate>
+			
+			<guid>https://roninzc.github.io/posts/rsa/rsa%E4%B8%89-%E5%AF%86%E9%92%A5%E7%9A%84%E6%A0%BC%E5%BC%8F/</guid>
+			<description>前言 本篇博文重点描述密钥的种种格式；
+备注，本文是作者的原创作品，转载请注明出处。
+ 转载至https://www.shangyang.me/2017/05/24/encrypt-rsa-keyformat/
+ PEM 和 DER 首先我们来看看什么是 PEM 和 DER
+什么是 DER 格式 DER 是密钥的二进制表述格式；
+http://fileformats.archiveteam.org/wiki/DER
+ Distinguished Encoding Rules (DER) is a binary serialization of ASN.1 format. It is often used for cryptographic data such as certificates, but has other uses.
+ 很明显，DER 就是 ASN.1 的二进制格式；
+什么是 PEM 格式 PEM 格式既是对 DER 编码转码为 Base64 字符格式；通过解码，将会还原为 DER 格式；
+http://fileformats.archiveteam.org/wiki/PEM
+ A PEM file is plain text. It contain one or more objects, such as certificates or keys, which may not all be the same type.</description>
+			<content type="html"><![CDATA[<h1 id="前言">前言</h1>
+<p>本篇博文重点描述密钥的种种格式；</p>
+<p>备注，本文是作者的原创作品，转载请注明出处。</p>
+<blockquote>
+<p>转载至<code>https://www.shangyang.me/2017/05/24/encrypt-rsa-keyformat/</code></p>
+</blockquote>
+<h1 id="pem-和-der">PEM 和 DER</h1>
+<p>首先我们来看看什么是 PEM 和 DER</p>
+<h2 id="什么是-der-格式">什么是 DER 格式</h2>
+<p>DER 是密钥的二进制表述格式；</p>
+<p><a href="http://fileformats.archiveteam.org/wiki/DER">http://fileformats.archiveteam.org/wiki/DER</a></p>
+<blockquote>
+<p><code>Distinguished Encoding Rules (DER)</code> is a <em>binary serialization</em> of ASN.1 format. It is often used for cryptographic data such as certificates, but has other uses.</p>
+</blockquote>
+<p>很明显，DER 就是 ASN.1 的二进制格式；</p>
+<h2 id="什么是-pem-格式">什么是 PEM 格式</h2>
+<p>PEM 格式既是对 DER 编码转码为 Base64 字符格式；通过解码，将会还原为 DER 格式；</p>
+<p><a href="http://fileformats.archiveteam.org/wiki/PEM">http://fileformats.archiveteam.org/wiki/PEM</a></p>
+<blockquote>
+<p>A PEM file is plain text. It contain one or more objects, such as certificates or keys, which may not all be the same type. Each object is delimited by lines similar to “—–BEGIN …—–” and “—–END …—–”. Data that is not between such lines is ignored, and is sometimes used for comments, or for a human-readable dump of the encoded data.</p>
+</blockquote>
+<p>Following the “BEGIN” and “END” keywords is a name (such as “CERTIFICATE”) that can be used as an identifier for the type of object.</p>
+<blockquote>
+<p>The data between the delimiter lines starts with an optional email-like header section, followed by base64-encoded payload data. After decoding, the payload data is in DER format.</p>
+</blockquote>
+<p>总体而言，PEM 是明文格式，可以包含证书或者是密钥；其内容通常是以类似 “—–BEGIN …—–” 开头 “—–END …—–” 为结尾的这样的格式进行展示的；后续内容也描述到，PEM 格式的内容是 Base64 格式；通过解码，转换为 DER 格式，也就是说，PEM 是建立在 DER 编码之上的；</p>
+<h2 id="总结">总结</h2>
+<p>DER 实际上就是密钥的最原始的二进制格式；而 PEM 是对 DER 的 Base64 的编码，PEM 解码后得到的就是 DER 编码格式；</p>
+<h1 id="格式">格式</h1>
+<p>由于 DER 是二进制格式，不便于阅读和理解，一般而言，密钥都是通过 PEM 的格式进行存储的，所以，这部分内容主要是梳理出公钥和密钥以 PEM 编码存储的格式；</p>
+<h2 id="公钥-pem-格式">公钥 PEM 格式</h2>
+<h3 id="pkcs-1">PKCS #1</h3>
+<p>PKCS #1 标准是专门为 RSA 密钥进行定义的，其对应的 PEM 文件格式如下，</p>
+<pre><code>-----BEGIN RSA PUBLIC KEY-----
+BASE64 ENCODED DATA
+-----END RSA PUBLIC KEY-----
+</code></pre><p>上面的内容 <em>BASE64 ENCODED DATA</em> 指的就是 ANS.1 的 DER 的 Base64 编码，其内容类似于</p>
+<pre><code>MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQChHmaw+WUhWrStdxWBcAR39i2e  
+3yz+vfLiDALeTpWIH1jKiYtvw4nMg6453pXAJSvPn7mKaiGiC3USIt8qTL4eCPi9  
+yNRDpZ1JRHI8M87VYB4c9KMk6IuVFiYyZ4MBTP87t89yeL9EOrAD0eFgi5fPx3g8  
+b9QrmnyPhMVjP7ct+wIDAQAB
+</code></pre><p>上述内容翻译成 ASN.1 的格式为，此部分内容参考 <a href="https://www.shangyang.me/2017/05/21/encrypt-rsa-pkcs/#RSA-public-key-syntax-%E5%85%AC%E9%92%A5%E8%AF%AD%E6%B3%95">RSA public key syntax 公钥语法</a> 小节内容；</p>
+<pre><code>RSAPublicKey ::= SEQUENCE {
+    modulus           INTEGER,  -- n
+    publicExponent    INTEGER   -- e
+}
+</code></pre><h3 id="pkcs-8">PKCS #8</h3>
+<p>有前面的分析我们可以知道，PKCS#8 标准定义了一个密钥格式的通用方案，它不仅仅为 RSA 所使用，同样也可以被其它密钥所使用；具体分析参考 <a href="https://www.shangyang.me/2017/05/21/encrypt-rsa-pkcs/#RFC5208-Private-Key-Information-Syntax-Specification">RFC5208 Private-Key Information Syntax Specification</a></p>
+<p>其所对应的 PEM 格式定义如下，</p>
+<pre><code>-----BEGIN PUBLIC KEY-----
+BASE64 ENCODED DATA
+-----END PUBLIC KEY-----
+</code></pre><p>注意，这里就没有 RSA 字样了，因为 PKCS#8 是一个通用型的秘钥格式方案；其中的 <em>BASE64 ENCODED DATA</em> 所标注的内容为 PEM 格式中对 DER 原始二进制进行的 BASE64 编码；</p>
+<p>所对应的 DER 原始二进制所表述的内容为</p>
+<pre><code>PublicKeyInfo ::= SEQUENCE {
+  algorithm       AlgorithmIdentifier,
+  PublicKey       BIT STRING
+}
+
+AlgorithmIdentifier ::= SEQUENCE {
+  algorithm       OBJECT IDENTIFIER,
+  parameters      ANY DEFINED BY algorithm OPTIONAL
+}
+</code></pre><p><strong>重要补充</strong></p>
+<p>从这里可以看到，PKCS#8 虽然名字叫做 Private-Key Information Syntax Specification，但是实际上，可以看到，它同样可以用作 Public Key 的格式定义；而 PKCS#8 是站在 PKCS#7 CMS 的基础之上进行编码格式定义的；</p>
+<h2 id="私钥-pem-格式">私钥 PEM 格式</h2>
+<h3 id="pkcs-1-1">PKCS #1</h3>
+<p>PKCS#1 是专门为 RSA 所涉及的，其对应的 PEM 格式如下</p>
+<pre><code>-----BEGIN RSA PRIVATE KEY-----
+BASE64 ENCODED DATA
+-----END RSA PRIVATE KEY-----
+</code></pre><p>其中的 <em>BASE64 ENCODED DATA</em> 所标注的内容为 PEM 格式中对 DER 原始二进制进行的 BASE64 编码；</p>
+<p>原始的 DER 格式结构，既是 ASN.1 的数据结构，此部分内容参考 <a href="https://www.shangyang.me/2017/05/21/encrypt-rsa-pkcs/#RSA-private-key-syntax-%E7%A7%81%E9%92%A5%E8%AF%AD%E6%B3%95">RSA private key syntax 私钥语法</a> 小节内容；</p>
+<pre><code>RSAPrivateKey ::= SEQUENCE {
+  version           Version,
+  modulus           INTEGER,  -- n
+  publicExponent    INTEGER,  -- e
+  privateExponent   INTEGER,  -- d
+  prime1            INTEGER,  -- p
+  prime2            INTEGER,  -- q
+  exponent1         INTEGER,  -- d mod (p-1)
+  exponent2         INTEGER,  -- d mod (q-1)
+  coefficient       INTEGER,  -- (inverse of q) mod p
+  otherPrimeInfos   OtherPrimeInfos OPTIONAL
+}
+</code></pre><h3 id="pkcs-8-1">PKCS #8</h3>
+<h4 id="未加密">未加密</h4>
+<p>其所对应的 PEM 格式定义如下，</p>
+<pre><code>-----BEGIN PRIVATE KEY-----
+BASE64 ENCODED DATA
+-----END PRIVATE KEY-----
+</code></pre><p>注意，这里就没有 RSA 字样了，因为 PKCS#8 是一个通用型的秘钥格式方案；其中的 <em>BASE64 ENCODED DATA</em> 所标注的内容为 PEM 格式中对 DER 原始二进制进行的 BASE64 编码；</p>
+<p>所对应的 DER 原始二进制所表述的内容为</p>
+<pre><code>PrivateKeyInfo ::= SEQUENCE {
+  version         Version,
+  algorithm       AlgorithmIdentifier,
+  PrivateKey      BIT STRING
+}
+
+AlgorithmIdentifier ::= SEQUENCE {
+  algorithm       OBJECT IDENTIFIER,
+  parameters      ANY DEFINED BY algorithm OPTIONAL
+}
+</code></pre><h4 id="加密">加密</h4>
+<p>由于私钥是非常私密的，所以在存储到时候往往需要对私钥的内容也进行加密，</p>
+<p>PEM 格式</p>
+<pre><code>-----BEGIN ENCRYPTED PRIVATE KEY-----
+BASE64 ENCODED DATA
+-----END ENCRYPTED PRIVATE KEY-----
+</code></pre><p>DER 格式，既是根据 ASN.1 标准所定义的格式</p>
+<pre><code>EncryptedPrivateKeyInfo ::= SEQUENCE {
+  encryptionAlgorithm  EncryptionAlgorithmIdentifier,
+  encryptedData        EncryptedData
+}
+
+EncryptionAlgorithmIdentifier ::= AlgorithmIdentifier
+
+EncryptedData ::= OCTET STRING
+</code></pre>]]></content>
+		</item>
+		
+		<item>
+			<title>RSA(二) PKCS 公钥加密标准系列</title>
+			<link>https://roninzc.github.io/posts/rsa/rsa%E4%BA%8C-pkcs-%E5%85%AC%E9%92%A5%E5%8A%A0%E5%AF%86%E6%A0%87%E5%87%86%E7%B3%BB%E5%88%97/</link>
+			<pubDate>Wed, 03 Mar 2021 13:41:25 +0800</pubDate>
+			
+			<guid>https://roninzc.github.io/posts/rsa/rsa%E4%BA%8C-pkcs-%E5%85%AC%E9%92%A5%E5%8A%A0%E5%AF%86%E6%A0%87%E5%87%86%E7%B3%BB%E5%88%97/</guid>
+			<description>前言 本章着重描述 RSA PCKS(Public-Key Cryptography Standards Series 公钥加密标准系列)，RSA 又称为公钥加密技术，主要的使用场景是公钥加密、私钥解密（补充，当然，私钥加密，公钥机密也是可行的，但是这样做并不安全，因为公钥是公开的，所有拿到公钥的人都可以解密，也就失去了加密的本质；不过，可以用私钥来进行签名，后续有专门的博文对此进行描述）；
+为了定义 RSA 加密的标准系列，IETF 组织总共定义了 15 个子系列标准，分别用在定义标准格式、如何封装、公钥加密封装标准、私钥加密封装标准、网络传输序列化标准等等.. 具体可以参考 wikipedia PCKS 的解释: https://en.wikipedia.org/wiki/PKCS；
+下面我就几个核心的系列标准进行描述，
+重要：本文为作者的原创作品，转载需注明出处；
+ 转载至https://www.shangyang.me/2017/05/24/encrypt-rsa-keyformat/
+ 未完待续….
+PKCS #1 RSA Cryptography Standard 摘要 wikepedia 中的一段摘要，
+ See RFC 3447. Defines the mathematical properties and format of RSA public and private keys (ASN.1-encoded in clear-text), and the basic algorithms and encoding/padding schemes for performing RSA encryption, decryption, and producing and verifying signatures.</description>
+			<content type="html"><![CDATA[<h1 id="前言">前言</h1>
+<p>本章着重描述 RSA PCKS(Public-Key Cryptography Standards Series 公钥加密标准系列)，RSA 又称为公钥加密技术，主要的使用场景是公钥加密、私钥解密（补充，当然，私钥加密，公钥机密也是可行的，但是这样做并不安全，因为公钥是公开的，所有拿到公钥的人都可以解密，也就失去了加密的本质；不过，可以用私钥来进行签名，后续有专门的博文对此进行描述）；</p>
+<p>为了定义 RSA 加密的标准系列，IETF 组织总共定义了 15 个子系列标准，分别用在定义标准格式、如何封装、公钥加密封装标准、私钥加密封装标准、网络传输序列化标准等等.. 具体可以参考 wikipedia PCKS 的解释: <a href="https://en.wikipedia.org/wiki/PKCS">https://en.wikipedia.org/wiki/PKCS</a>；</p>
+<p>下面我就几个核心的系列标准进行描述，</p>
+<p>重要：本文为作者的原创作品，转载需注明出处；</p>
+<blockquote>
+<p>转载至<code>https://www.shangyang.me/2017/05/24/encrypt-rsa-keyformat/</code></p>
+</blockquote>
+<p>未完待续….</p>
+<h1 id="pkcs-1-rsa-cryptography-standard">PKCS #1 RSA Cryptography Standard</h1>
+<p>摘要 wikepedia 中的一段摘要，</p>
+<blockquote>
+<p>See <a href="https://tools.ietf.org/html/rfc3447">RFC 3447</a>. Defines the mathematical properties and format of RSA public and private keys (ASN.1-encoded in clear-text), and the basic algorithms and encoding/padding schemes for performing RSA encryption, decryption, and producing and verifying signatures.</p>
+</blockquote>
+<p>定义了公钥加密技术(RSA)相关的数学属性以及相关的公钥和密钥的格式标准（通过 ASN.1 的格式标准来定义并明文展示），以及为 RSA 进行加密、解密，生成和验证签名等操作定义了基本的算法和编码/补零(padding)的方案；</p>
+<p>可以看到，PCKS #1 主要定义了公钥加密技术 RSA 是如何通过计算机来来定义其编码、通讯格式包括公钥私钥的文本格式(通过 ASN.1 来定义)等一系列能够使用计算机来进行通讯和计算的方案；</p>
+<p>要注意的是，PCKS #1 定义的都是明文的格式；下面我们来看看 ASN.1 是如何定义私钥和公钥的格式的，来加深我们的认知；</p>
+<h2 id="asn1">ASN.1</h2>
+<p>ASN.1: <a href="https://en.wikipedia.org/wiki/Abstract_Syntax_Notation_One">https://en.wikipedia.org/wiki/Abstract_Syntax_Notation_One</a></p>
+<blockquote>
+<p>Abstract Syntax Notation One (ASN.1) is an interface description language for defining data structures that can be serialized and deserialized in a standard, cross-platform way. It’s broadly used in telecommunications and computer networking, and especially in cryptography.</p>
+</blockquote>
+<p>ASN.1 是一种接口描述性语言，该语言定义了能够进行跨平台、序列化和反序列化的数据格式；它被广泛的用于电子通讯以及计算机网络中，特别是用在<code>密码学的领域</code>；由此可知，ASN.1 定义了一种专用于密码学领域的一种可以进行序列化和反序列化的数据格式；</p>
+<blockquote>
+<p>ASN.1 is used in X.509, which defines the format of certificates used in the HTTPS protocol for securely browsing the web, and in many other cryptographic systems.</p>
+</blockquote>
+<p>ASN.1 用在 X.509 中，用来定义其证书的格式，该证书用在 HTTPS 安全通讯领域；</p>
+<p>那么 RSA 是如何通过 ASN.1 来定义公钥和私钥的数据格式的；看下面的章节，主要参考，https://tools.ietf.org/html/rfc3447#appendix-A</p>
+<h3 id="rsa-public-key-syntax-公钥语法">RSA public key syntax 公钥语法</h3>
+<p><a href="https://tools.ietf.org/html/rfc3447#appendix-A.1.1">https://tools.ietf.org/html/rfc3447#appendix-A.1.1</a></p>
+<blockquote>
+<p>An RSA public key should be represented with the ASN.1 type
+RSAPublicKey:</p>
+</blockquote>
+<pre><code>RSAPublicKey ::= SEQUENCE {
+    modulus           INTEGER,  -- n
+    publicExponent    INTEGER   -- e
+}
+</code></pre><blockquote>
+<p>The fields of type RSAPublicKey have the following meanings:</p>
+<pre><code>* modulus is the RSA modulus n.
+* publicExponent is the RSA public exponent e.
+</code></pre></blockquote>
+<p>上面通过 ASN.1 定义了公钥的格式，通过一个 ASN.1 的 SEQUENCE 元素分别定义了 modules 和 publicExponent，而 modules 正是代表的 <a href="https://www.shangyang.me/2017/05/19/encrypt-rsa-math/#%E6%A8%A1-N">模 N</a>，而 publicExponent 正式代表的<a href="https://www.shangyang.me/2017/05/19/encrypt-rsa-math/#%E9%9A%8F%E6%9C%BA%E6%95%B0-e">随机数 e</a>，而 {𝑁,𝑒}{N,e} 正好表示了公钥；</p>
+<p>可见，通过 ASN.1 的 <em>SEQUENCE</em> 元素<code>RSAPublicKey</code>定义了公钥的数据格式，该格式便可以在网络通讯中进行序列化和反序列化；</p>
+<h3 id="rsa-private-key-syntax-私钥语法">RSA private key syntax 私钥语法</h3>
+<p><a href="https://tools.ietf.org/html/rfc3447#appendix-A.1.2">https://tools.ietf.org/html/rfc3447#appendix-A.1.2</a></p>
+<pre><code>RSAPrivateKey ::= SEQUENCE {
+          version           Version,
+          modulus           INTEGER,  -- n
+          publicExponent    INTEGER,  -- e
+          privateExponent   INTEGER,  -- d
+          prime1            INTEGER,  -- p
+          prime2            INTEGER,  -- q
+          exponent1         INTEGER,  -- d mod (p-1)
+          exponent2         INTEGER,  -- d mod (q-1)
+          coefficient       INTEGER,  -- (inverse of q) mod p
+          otherPrimeInfos   OtherPrimeInfos OPTIONAL
+}
+</code></pre><p>可见，ASN.1 同样通过一个 <em>SEQUENCE</em> 元素<code>RSAPrivateKey</code>定义了私钥的数据格式，d 既是模反元素，p、q 两质数，exponent1 和 exponent2 分别表示 d 与 (p-1) 和 (p-2) 的余数；</p>
+<p>可以看到 ASN.1 定义了 private key 的数据格式；</p>
+<h2 id="补充">补充</h2>
+<p>要查看明文的 public key / private key 的 ASN.1 的源数据格式，可以通过工具 <a href="http://phpseclib.sourceforge.net/x509/asn1parse.php">http://phpseclib.sourceforge.net/x509/asn1parse.php</a> 查看；</p>
+<h1 id="pkcs-7-cryptographic-message-syntax-standard">PKCS #7 Cryptographic Message Syntax Standard</h1>
+<p>Cryptographic Message Syntax Standard 被加密消息的格式标准，与 PKCS #1 不同，PKCS #7 描述的是如何对公钥和私钥 ASN.1 的文本进行加密的标准；PKCS #1 标准描述的是 RSA 加密技术相关标准的定义；先来看 Wikipedia 上的一段摘要，</p>
+<blockquote>
+<p>See <a href="https://tools.ietf.org/html/rfc2315">RFC 2315</a>. Used to sign and/or encrypt messages under a <a href="https://en.wikipedia.org/wiki/Public_key_infrastructure">PKI</a>. Used also for certificate dissemination (for instance as a response to a PKCS #10 message). Formed the basis for S/MIME, which is as of 2010 based on RFC 5652, an updated <a href="https://en.wikipedia.org/wiki/Cryptographic_Message_Syntax">Cryptographic Message Syntax Standard (CMS)</a>. Often used for single sign-on.</p>
+</blockquote>
+<p>PKCS #7 通常在一个 PKI 中用来签名或者加密信息，也通常用于证书的传递；PKCS #7 的更新版本参考<a href="https://en.wikipedia.org/wiki/Cryptographic_Message_Syntax">Cryptographic Message Syntax Standard (CMS)</a>；</p>
+<p>从上述的描述中可以知道，PKCS #7 主要定义了消息的加密语法标准；</p>
+<p>摘要<a href="https://tools.ietf.org/html/rfc5652#section-3">CMS</a>介绍中的相关重要部分,</p>
+<blockquote>
+<p>The CMS describes an encapsulation syntax for data protection.</p>
+<p>The CMS can support a variety of architectures for certificate-based
+key management, such as the one defined by the PKIX (Public Key
+Infrastructure using X.509) working group [PROFILE].</p>
+</blockquote>
+<p>CMS 用来描述数据加密的一种封装语法；</p>
+<p>CMS 可以用于支持多种多样的证书管理实现，比如 PKIX (X.509 中的公钥管理的内部实现)；</p>
+<p>Ok，从上述的描述中可以看到，PKCS #7 主要用在 PKI/PKIX 领域中，主要是用来进行公钥加密保存、传输等；</p>
+<h2 id="pkcs-7-format">PKCS #7 Format</h2>
+<p><a href="https://crypto.stackexchange.com/questions/37084/is-pkcs7-a-signature-format-or-a-certificate-format">https://crypto.stackexchange.com/questions/37084/is-pkcs7-a-signature-format-or-a-certificate-format</a> 这篇文章对 PKCS #7 进行了比较详细的讨论；摘要部分如下，</p>
+<blockquote>
+<p>The <em>.p7b</em> or <em>.p7c</em> format is a special case of PKCS#7/CMS: a SignedData structure containing no “content” and zero SignerInfos, but one or more certificates (usually) and/or CRLs (rarely).</p>
+</blockquote>
+<p>可以知道，如果使用 PKCS#7 原生格式，将会使用 <em>.p7c</em> 后缀名，如果使用的是 CMS，那么使用的是 <em>.p7b</em> 后缀；</p>
+<p>从 <a href="https://tools.ietf.org/html/rfc5652#section-12.1">https://tools.ietf.org/html/rfc5652#section-12.1</a> 可以看到详细的 ASN.1 中有关 CMS 的标准定义，</p>
+<p>摘要部分信息如下，</p>
+<ol>
+<li>
+<p>数据内容信息</p>
+<pre><code>ContentInfo ::= SEQUENCE {
+  contentType ContentType,
+  content [0] EXPLICIT ANY DEFINED BY contentType }
+   
+ContentType ::= OBJECT IDENTIFIER
+</code></pre></li>
+<li>
+<p>数据签名信息</p>
+<pre><code>SignedData ::= SEQUENCE {
+  version CMSVersion,
+  digestAlgorithms DigestAlgorithmIdentifiers,
+  encapContentInfo EncapsulatedContentInfo,
+  certificates [0] IMPLICIT CertificateSet OPTIONAL,
+  crls [1] IMPLICIT RevocationInfoChoices OPTIONAL,
+  signerInfos SignerInfos }
+</code></pre></li>
+<li>
+<p>签名者信息</p>
+<pre><code>SignerInfo ::= SEQUENCE {
+  version CMSVersion,
+  sid SignerIdentifier,
+  digestAlgorithm DigestAlgorithmIdentifier,
+  signedAttrs [0] IMPLICIT SignedAttributes OPTIONAL,
+  signatureAlgorithm SignatureAlgorithmIdentifier,
+  signature SignatureValue,
+  unsignedAttrs [1] IMPLICIT UnsignedAttributes OPTIONAL }
+</code></pre></li>
+<li>
+<p>密钥加密算法信息</p>
+<pre><code>KeyTransRecipientInfo ::= SEQUENCE {
+  version CMSVersion,  -- always set to 0 or 2
+  rid RecipientIdentifier,
+  keyEncryptionAlgorithm KeyEncryptionAlgorithmIdentifier,
+  encryptedKey EncryptedKey }
+</code></pre></li>
+<li>
+<p>被加密数据的信息</p>
+<pre><code>EncryptedData ::= SEQUENCE {
+  version CMSVersion,
+  encryptedContentInfo EncryptedContentInfo,
+  unprotectedAttrs [1] IMPLICIT UnprotectedAttributes OPTIONAL }
+</code></pre></li>
+</ol>
+<p>可见，PKCS#7 定义完整的一整套的用于加密数据，签名，签名者，加密算法等等一系列信息；由此，奠定了其作为 PKI 的基础；</p>
+<h2 id="pkcs-7-的用途">PKCS #7 的用途</h2>
+<p><a href="http://stackoverflow.com/questions/3344527/what-for-are-the-commonly-used-pkcs-standards-pkcs7-pkcs10-and-pkcs12">http://stackoverflow.com/questions/3344527/what-for-are-the-commonly-used-pkcs-standards-pkcs7-pkcs10-and-pkcs12</a></p>
+<p>摘抄部分如下，</p>
+<blockquote>
+<p>PKCS#7 lets you sign and encrypt generic data using X.509 certificates. Also PKCS#7 format can be used to store one or more certificates without private keys (private keys can be put as a data payload and encrypted this way).</p>
+</blockquote>
+<p>PKCS#7 使得你可以通过使用 X.509 证书对普通的数据进行签名和加密；PKCS#7 也可以用来存放不包含私钥的一个或者多个证书；</p>
+<h2 id="pki">PKI</h2>
+<p>前文提到了，PKCS#7 用来保证 PKI 的加密格式标准，保证公钥证书的安全性；</p>
+<p>Public key infrastructure：https://en.wikipedia.org/wiki/Public_key_infrastructure</p>
+<p>公钥基础设施，基础设施包含 CA(certificate authority)、RA、VA 等，从 wikipedia 的描述上来看，主要是为了保证公钥证书颁发途径中的安全性、保密性.. 等等相关措施，目的就是为了在公钥证书传递过程中，避免公钥被串改以后信息的不安全性..</p>
+<p>TODO，将来准备单独写一章关于 PKI 的博文来详细的描述此类相关内容。</p>
+<h1 id="pkcs-8-private-key-information-syntax-standard">PKCS #8 Private-Key Information Syntax Standard</h1>
+<p>Private-Key Information Syntax Standard 私钥信息格式标准，看 Wikipedia 的描述，</p>
+<blockquote>
+<p>See <a href="https://tools.ietf.org/html/rfc5958">RFC 5958</a>. Used to carry private certificate keypairs (encrypted or unencrypted).</p>
+</blockquote>
+<p>用来携带<code>加密</code>的或者<code>未加密</code>的私钥证书；也就是说，PKCS#8 定义了私钥的加密和未加密的格式；</p>
+<p>备注，最开始 PKCS#8 标准是由 RFC5208 标准定义，但是后来为了更好的支持 PKI 基础设施，由新的标准 RFC 5958 替换了原来的 RFC5208 标准，这部分内容可以从后续部分 <a href="https://www.shangyang.me/2017/05/21/encrypt-rsa-pkcs/#RFC5958-Asymmetric-Key-Packages">RFC5958 Asymmetric Key Packages</a>中了解；但因为 RFC5208 更简明，所以，这里首先介绍 RFC5208 的标准内容；</p>
+<h2 id="rfc5208-private-key-information-syntax-specification">RFC5208 Private-Key Information Syntax Specification</h2>
+<p>该文档中主要包含了两个部分，private key 的原始格式 <a href="https://www.shangyang.me/2017/05/21/encrypt-rsa-pkcs/#private-key-info">private key info</a> 和 private key 的加密格式 <a href="https://www.shangyang.me/2017/05/21/encrypt-rsa-pkcs/#encrypted-private-key-info">encrypted private key info</a>；</p>
+<p><a href="https://tools.ietf.org/html/rfc5208">https://tools.ietf.org/html/rfc5208</a></p>
+<h3 id="private-key-info">private key info</h3>
+<p>Private-key information shall have ASN.1 type PrivateKeyInfo:</p>
+<pre><code>PrivateKeyInfo ::= SEQUENCE {
+  version                   Version,
+  privateKeyAlgorithm       PrivateKeyAlgorithmIdentifier,
+  privateKey                PrivateKey,
+  attributes           [0]  IMPLICIT Attributes OPTIONAL }
+
+Version ::= INTEGER
+
+PrivateKeyAlgorithmIdentifier ::= AlgorithmIdentifier
+
+PrivateKey ::= OCTET STRING
+
+Attributes ::= SET OF Attribute
+</code></pre><p>可以看到，通过 ASN.1 格式封装了私钥，重要的有两个字段，privateKeyAlgorithm 和 privateKey；</p>
+<ul>
+<li>
+<p>privateKeyAlgorithm
+表示采用的是什么算法，可以是 RSA，也可以是其它的算法，比如 DES、AES 等对称加密算法等。</p>
+</li>
+<li>
+<p>privateKey
+通过其类型可以知道，是一个</p>
+<pre><code>PrivateKey ::= OCTET STRING
+</code></pre><p>可见，其由一个八位字节字符串组成；这就是私钥的内容，如果采用的是 RSA，那么自然存储的就是 {N,d} 等相关的私钥信息，详情参考<a href="https://www.shangyang.me/2017/05/21/encrypt-rsa-pkcs/#RSA-private-key-syntax-%E7%A7%81%E9%92%A5%E8%AF%AD%E6%B3%95">RSA private key syntax</a>，如果采用的是 DES 算法呢，那么存储的就是 DES key 相关的信息…</p>
+</li>
+</ul>
+<p>摘抄两端核心的内容如下</p>
+<blockquote>
+<p><strong>privateKeyAlgorithm</strong> identifies the private-key algorithm. One example of a private-key algorithm is PKCS #1’s rsaEncryption [PKCS#1].</p>
+</blockquote>
+<p>privateKeyAlgorithm 表示私钥所使用的算法，一个例子就是 PKCS#1 所表述的 PKCS#1 的 rsa 加密技术；</p>
+<blockquote>
+<p><strong>privateKey</strong> is an octet string whose contents are the value of the private key. The interpretation of the contents is defined in the registration of the private-key algorithm. For an RSA private key, for example, the contents are a BER encoding of a value of type RSAPrivateKey.</p>
+</blockquote>
+<p>privateKey 是一个包含私钥内容的八位字节字符串 octet string，该内容由其加密算法所描述和解释；比如 RSA 私钥，其内容表示一个通过 BER 编码的私钥；</p>
+<p>总结一下，</p>
+<p>可以看到，PKCS #8 在原来私钥的格式上做了一层抽象封装，这样使得它可以兼容任何的私钥格式；使得 PKCS 的私钥标准可以使用到任何加密算法，这个同 PKCS#1 中定义的 RSA <a href="https://www.shangyang.me/2017/05/21/encrypt-rsa-pkcs/#RSA-private-key-syntax-%E7%A7%81%E9%92%A5%E8%AF%AD%E6%B3%95">私钥语法</a>是不同的，PKCS #1 定义的只是特定的 RSA 私钥的语法格式；</p>
+<p>Ok，从这里就可以清晰的看到 PKCS 的发展方向了，PKCS 体系已经突破了单纯的 RSA 加密算法，而是扩展到了可以适配任何的加密算法，所以，PKCS 已经成为了一种通用的密码学格式标准。当然，CMS 在此基础上更进一步，建立了 PKI 体系中所需的其它类型信息，包括加密数据，签名，签名者，加密算法等等公钥加密技术基础设施相关的东西，详情参考<a href="https://www.shangyang.me/2017/05/21/encrypt-rsa-pkcs/#PKCS-7-Format">PKCS #7 Format</a>部分，而这部分正是 RFC5958 标准淘汰当前 RFC5208 标准的地方，不过精华其实还是在 RFC5208；</p>
+<h3 id="encrypted-private-key-info">encrypted private key info</h3>
+<p><a href="https://tools.ietf.org/html/rfc5208#section-6">https://tools.ietf.org/html/rfc5208#section-6</a></p>
+<pre><code>EncryptedPrivateKeyInfo ::= SEQUENCE {
+  encryptionAlgorithm  EncryptionAlgorithmIdentifier,
+  encryptedData        EncryptedData }
+
+EncryptionAlgorithmIdentifier ::= AlgorithmIdentifier
+</code></pre><p>相关核心内容摘抄如下，</p>
+<blockquote>
+<p>The fields of type EncryptedPrivateKeyInfo have the following meanings:</p>
+</blockquote>
+<p><strong>encryptionAlgorithm</strong> identifies the algorithm under which the private-key information is encrypted. Two examples are <em>PKCS #5’s pbeWithMD2AndDES-CBC</em> and <em>pbeWithMD5AndDES-CBC [PKCS#5]</em>.</p>
+<p><strong>encryptionAlgorithm</strong> 字段表示私钥使用什么算法进行加密的；通常使用 PKCS#5 的 <em>MD2AndDES</em> 或者 <em>MD5AndDES</em> 两种加密算法；</p>
+<blockquote>
+<p><strong>encryptedData</strong> is the result of encrypting the private-key information.</p>
+</blockquote>
+<p><strong>encryptedData</strong> 是私钥通过加密算法 <strong>encryptionAlgorithm</strong> 加密以后的内容；</p>
+<blockquote>
+<p>The encryption process involves the following two steps:</p>
+<ol>
+<li>The private-key information is BER encoded, yielding an octet string.</li>
+<li>The result of step 1 is encrypted with the secret key to give an octet string, the result of the encryption process.</li>
+</ol>
+</blockquote>
+<p>加密过程包含两个步骤，</p>
+<ol>
+<li>私钥的内容通过 BER 编码，并产生相关的八位字节字符串 octet string</li>
+<li>第一步产生的结果将会通过密钥(secret key)进行加密并再产生一个 octet string，该 octet string 便是这个加密过程的结果；</li>
+</ol>
+<p>可以看到，私钥的整个内容都被 <em>encryptionAlgorithm</em> 所指明的加密算法进行了加密；</p>
+<h2 id="rfc5958-asymmetric-key-packages">RFC5958 Asymmetric Key Packages</h2>
+<p>看看 RFC5958 的 Introduction 章节，</p>
+<blockquote>
+<p>This document defines the syntax for private-key information and a
+Cryptographic Message Syntax (CMS) [RFC5652] content type for it. Private-key information includes a private key for a specified public-key algorithm and a set of attributes. The CMS can be used to digitally sign, digest, authenticate, or encrypt the asymmetric key format content type. This document obsoletes PKCS #8 v1.2 [RFC5208].</p>
+</blockquote>
+<p>可见 RFC5958 定义了不但私钥的语法还定义了相关的 CMS 的文本类型(content type)；Private-key information 包含了一个特定公钥算法的私钥以及一些列的属性；CMS 可以用来进行数字签名，digest，验证或者用来加密非对称密钥的内容和格式；该文档淘汰了过时的 PKCS #8 v1.2 [RFC5208]；</p>
+<p>RFC5958 Asymmetric Key Packages: <a href="https://tools.ietf.org/html/rfc5958">https://tools.ietf.org/html/rfc5958</a> 淘汰了过时的 RFC5208 PKCS #8: Private-Key Information Syntax Specification Version 1.2 <a href="https://tools.ietf.org/html/rfc5208">https://tools.ietf.org/html/rfc5208</a>；</p>
+<p>虽然是淘汰了 RFC5208，不过笔者在阅览完 RFC5208 以后，发现 RFC5208 内容更为清晰易懂，所以，还是打算从 RFC5208 入手进行梳理；这部分内容参考 <a href="https://www.shangyang.me/2017/05/21/encrypt-rsa-pkcs/#RFC5208-Private-Key-Information-Syntax-Specification">RFC5208 Private-Key Information Syntax Specification</a></p>
+<p>后续 RFC5958 非常详细的描述了有关 CMS 的内容定义，以及私钥加密 ASN.1 格式的定义，这里就不再一一赘述了；</p>
+<h3 id="私钥文件的格式">私钥文件的格式</h3>
+<p>RFC5958 用不多的篇幅来描述了私钥的文件存储格式；不过以下内容比较零散，主要是翻译官方文档并做一些个人的理解；</p>
+<p>该小节主要来讲解私钥的存储格式，看下 RFC5958 中的一段<a href="https://tools.ietf.org/html/rfc5958#section-5">描述</a>，</p>
+<blockquote>
+<p>To extract the private-key information from the AsymmetricKeyPackage, the encapsulating layers need to be removed. At a minimum, the outer ContentInfo [RFC5652] layer needs to be removed. If the AsymmetricKeyPackage is encapsulated in a SignedData [RFC5652], then the SignedData and EncapsulatedContentInfo layers [RFC5652] also need to be removed. The same is true for EnvelopedData, EncryptedData, and AuthenticatedData all from [RFC5652] as well as AuthEnvelopedData from [RFC5083].</p>
+</blockquote>
+<p>这段话的意思就是说，要提取通过 AsymmetricKeyPackage 格式所封装的私钥，必须剥离其外部的封装层；至少，外部的 ContentInfo[RFC5652] 是需要被剥离出去的；如果封装了签名，同样该签名需要被剥离；同样的，如果有其它的封装数据，比如加密的数据，验证的数据等同样需要剥离出去；</p>
+<blockquote>
+<p>Once all the outer layers are removed, there are as many sets of private-key information as there are OneAsymmetricKey structures. OneAsymmetricKey and PrivateKeyInfo are the same structure; therefore, either can be saved as a <code>.p8</code> file or copied in to the <code>P12</code> KeyBag BAG-TYPE. Removing encapsulating security layers will invalidate any signature and may expose the key to unauthorized disclosure.</p>
+</blockquote>
+<p>当所有的外部层次都被剥离以后，所剩下的也就是最终私钥的信息结构了；该私钥的信息可以通过<code>.p8</code>格式文件或者是通过<code>P12</code> KeyBag BAG-TYPE 格式进行存储；不过注意的是，通过之前的步骤层层剥离，若将安全层也剥离以后，将会使得任何签名无效并且会将私钥暴露给非授权机构；</p>
+<p>下面这段有意思了，基本上阐述了通过<code>.p8</code>格式存储的私钥的格式，不过就是不够细致，也不够生动形象，官网的内容就是这样，点到为止，看得人痛不欲生；</p>
+<blockquote>
+<p><code>.p8</code> files are sometimes <code>PEM</code>-encoded. When .p8 files are <code>PEM</code> encoded they use the <code>.pem</code> file extension. <code>PEM</code> encoding is</p>
+<ul>
+<li>either the <code>Base64</code> encoding, from Section 4 of [RFC4648], of the <code>DER</code>-encoded <code>EncryptedPrivateKeyInfo</code> sandwiched between:</li>
+</ul>
+</blockquote>
+<pre><code>-----BEGIN ENCRYPTED PRIVATE KEY-----
+-----END ENCRYPTED PRIVATE KEY-----
+</code></pre><blockquote>
+<ul>
+<li>
+<p>or the Base64 encoding, see Section 4 of [RFC4648], of the</p>
+<pre><code>DER
+</code></pre><p>-encoded</p>
+<pre><code>PrivateKeyInfo
+</code></pre><p>sandwiched between:</p>
+<pre><code>-----BEGIN PRIVATE KEY-----
+-----END PRIVATE KEY-----
+</code></pre></li>
+</ul>
+</blockquote>
+<p>上面这段比较重要了，阐述了密钥通过<code>.p8</code>加密存储的格式，<code>.p8</code>文件是一种通过<code>PEM</code>编码的文件，当<code>.p8</code>文件通过<code>PEM</code>进行编码的时候，它们的文件后缀为<code>.pem</code>；<code>PEM</code>编码格式有两种方式</p>
+<ol>
+<li>
+<p>使用<code>DER</code>编码的<code>EncryptedPrivateKeyInfo</code>通过<code>Base64</code>转码后被包裹下面的两段标识符中</p>
+<pre><code>-----BEGIN ENCRYPTED PRIVATE KEY-----
+-----END ENCRYPTED PRIVATE KEY-----
+</code></pre><p>看过官网解释，你此时的状态应该是云里雾里的；这里作者想表达的是什么意思呢… 这里就是表示的如果私钥本身是经过加密存储的，既是 RFC5208 中所定义的 <a href="https://www.shangyang.me/2017/05/21/encrypt-rsa-pkcs/#encrypted-private-key-info">EncryptedPrivateKeyInfo</a> 所表述的信息，那么会使用如上的格式来进行存储；</p>
+</li>
+<li>
+<p>使用<code>DER</code>编码的<code>PrivateKeyInfo</code>通过<code>Base64</code>转码后被包裹下面的两段标识符中</p>
+<pre><code>-----BEGIN PRIVATE KEY-----
+-----END PRIVATE KEY-----
+</code></pre><p><code>PrivateKeyInfo</code>这里表示的就是明文，既是密钥没有经过加密，是通过<code>Base64</code>所存储的明文格式；</p>
+</li>
+</ol>
+<p>更多有关此部分的介绍查看 <a href="https://www.shangyang.me/2017/05/24/encrypt-rsa-keyformat/">RSA(三) 密钥的格式</a>部分内容；</p>
+]]></content>
+		</item>
+		
+		<item>
+			<title>RSA(一) 背后的数学原理</title>
+			<link>https://roninzc.github.io/posts/rsa/rsa%E4%B8%80-%E8%83%8C%E5%90%8E%E7%9A%84%E6%95%B0%E5%AD%A6%E5%8E%9F%E7%90%86/</link>
 			<pubDate>Wed, 03 Mar 2021 13:40:25 +0800</pubDate>
 			
-			<guid>https://roninzc.github.io/posts/first/</guid>
-			<description>Hello Hugo </description>
-			<content type="html"><![CDATA[<h3 id="hello-hugo">Hello Hugo</h3>
+			<guid>https://roninzc.github.io/posts/rsa/rsa%E4%B8%80-%E8%83%8C%E5%90%8E%E7%9A%84%E6%95%B0%E5%AD%A6%E5%8E%9F%E7%90%86/</guid>
+			<description>前言 本篇文章将试图从数学原理上理清 RSA 的加密解密的原理；并写一个简单的加密解密的用例来使用；
+备注，本文是作者的原创作品，转载请注明出处。
+ 转载至https://www.shangyang.me/2017/05/24/encrypt-rsa-keyformat/
+ 数论相关 模 N 随机选择两个大的质数 p 和 q，p 不等于 q, 计算得到 𝑁=𝑝𝑞N=pq
+欧拉函数的值 r = 𝜑(pq) 𝑟=𝜑(𝑝𝑞)=𝜑(𝑝)𝜑(𝑞)=(𝑝−1)(𝑞−1)r=𝜑(pq)=𝜑(p)𝜑(q)=(p−1)(q−1)
+欧拉函数值求的是有多少个小于 N 的数与 N 互质，如果 N 本身为质数，那么就有 N-1 个数与 N 互质；
+随机数 e 选择一个整数 e 且 1&amp;lt;𝑒&amp;lt;𝑟1&amp;lt;e&amp;lt;r，使得 e 与 r 互质(两个数的公约数为 1)；取 e 的目的是为了求得 e 关于 r 的模反元素 d；
+模反元素 d 什么是模反元素 d 由e小节可知，模反元素 d 是 e 关于 r 的模反元素且若模反元素 d 存在，当且仅当 e 与 r 互质；</description>
+			<content type="html"><![CDATA[<h1 id="前言">前言</h1>
+<p>本篇文章将试图从数学原理上理清 RSA 的加密解密的原理；并写一个简单的加密解密的用例来使用；</p>
+<p>备注，本文是作者的原创作品，转载请注明出处。</p>
+<blockquote>
+<p>转载至<code>https://www.shangyang.me/2017/05/24/encrypt-rsa-keyformat/</code></p>
+</blockquote>
+<h1 id="数论相关">数论相关</h1>
+<h2 id="模-n">模 N</h2>
+<p>随机选择两个大的质数 p 和 q，p 不等于 q, 计算得到 𝑁=𝑝𝑞N=pq</p>
+<h2 id="欧拉函数的值-r--𝜑pq">欧拉函数的值 r = 𝜑(pq)</h2>
+<p>𝑟=𝜑(𝑝𝑞)=𝜑(𝑝)𝜑(𝑞)=(𝑝−1)(𝑞−1)r=𝜑(pq)=𝜑(p)𝜑(q)=(p−1)(q−1)</p>
+<p>欧拉函数值求的是有多少个小于 N 的数与 N 互质，如果 N 本身为质数，那么就有 N-1 个数与 N 互质；</p>
+<h2 id="随机数-e">随机数 e</h2>
+<p>选择一个整数 e 且 1&lt;𝑒&lt;𝑟1&lt;e&lt;r，使得 e 与 r 互质(两个数的公约数为 1)；取 e 的目的是为了求得 e 关于 r 的<a href="https://www.shangyang.me/2017/05/19/encrypt-rsa-math/">模反元素</a> d；</p>
+<h2 id="模反元素-d">模反元素 d</h2>
+<h3 id="什么是模反元素-d">什么是模反元素 d</h3>
+<p>由<a href="https://www.shangyang.me/2017/05/19/encrypt-rsa-math/#%E9%9A%8F%E6%9C%BA%E6%95%B0-e">e</a>小节可知，模反元素 d 是 e 关于 r 的模反元素且若模反元素 d 存在，当且仅当 e 与 r 互质；</p>
+<p>模反元素的数学意义</p>
+<p>𝑒𝑑≡1(mod𝑟)ed≡1(modr)</p>
+<p>若 e 与 r 互质，那么总会找到这么一个数 d，使得 ed 和 1 与模 r 同余；通俗的说法既是，ed 除以 r 的余数与 1 除以 r 的余数相等，因为 1 除以 r 的余数恒等于 1，所以 ed 除以 r 的余数为 1，也就推出</p>
+<p>𝑒𝑑−1=𝑘𝑟ed−1=kr</p>
+<p>，该表达式的意思就是 ed - 1 是 r 的倍数；</p>
+<h3 id="如何计算得到-d">如何计算得到 d</h3>
+<p>那么如何计算得出此模反元素 d 呢？</p>
+<p>根据<a href="https://zh.wikipedia.org/wiki/%E6%89%A9%E5%B1%95%E6%AC%A7%E5%87%A0%E9%87%8C%E5%BE%97%E7%AE%97%E6%B3%95">扩展欧几里得算法</a>的公式有，在(mod𝑟)(modr)之下，</p>
+<p>𝑒𝑥+𝑟𝑦=1ex+ry=1</p>
+<p>，此时 x 的解既是 e 关于模 r 的一个模反元素；认真的读者读到这里，肯定会产生疑问，上面的公式 𝑒𝑑−1=𝑘𝑟ed−1=kr 怎么看起来与 𝑒𝑥+𝑟𝑦=1ex+ry=1 怎么这么像呢，但是又有差别，我们将公式 𝑒𝑑−1=𝑘𝑟ed−1=kr 调整一下，得到</p>
+<p>𝑒𝑑−𝑘𝑟=1…①ed−kr=1…①</p>
+<p>将扩展欧几里得算法的公式 𝑒𝑥+𝑟𝑦=1ex+ry=1 的 x、y 值进行替换，x = d, y = k，得到</p>
+<p>𝑒𝑑+𝑘𝑟=1…②ed+kr=1…②</p>
+<p>什么，两个看似如此矛盾的两个不同的方程(公式 ① 和公式 ②)… 什么意思？谁是对的？谁是错的？</p>
+<p>摘抄<a href="https://zh.wikipedia.org/wiki/%E6%A8%A1%E5%8F%8D%E5%85%83%E7%B4%A0">模反元素</a>中的一段内容如下，</p>
+<blockquote>
+<p>事实上， 𝑥+𝑘𝑛(𝑘∈ℤ)x+kn(k∈ℤ)都是a关于模n的模逆元，这里我们取最小的正整数解 𝑥(mod𝑛)(𝑥&lt;𝑛)x(modn)(x&lt;n)</p>
+</blockquote>
+<p>对应到我们的例子中来，也就是 𝑑+𝑘𝑟(𝑘∈ℤ)d+kr(k∈ℤ) 都是 e 关于模 r 的模逆元，这里我们取最小的正整数解 𝑑(mod𝑟)(𝑑&lt;𝑟)d(modr)(d&lt;r)；由此可知，d 的解实际上有无限多个，满足 𝑑+𝑘𝑟(𝑘∈ℤ)d+kr(k∈ℤ)；k 是整数集合，包含正整数、负整数和零；</p>
+<p>其实，公式①和公式②其实可以理解为同一个方程，只是 Y 轴（这里指 K 轴）的方向发生了变化而已；</p>
+<h1 id="加密和解密">加密和解密</h1>
+<p>假设 Bob 想给 Alice 送一个消息 m；</p>
+<h2 id="公钥和密钥">公钥和密钥</h2>
+<p>在 Alice 端，经过上述的步骤，我们总共得到了 6 个数字，p、q、N、r、e、d；并生成公钥和密钥，公钥就是(𝑁、𝑒)(N、e)组合；秘钥就是(𝑁、𝑑)(N、d)组合；并且 Alice 将公钥发送给 Bob；</p>
+<h2 id="加密过程">加密过程</h2>
+<p>Bob 想给 Alice 送一个消息 M，他拥有 Alice 的公钥，既是 (𝑁、𝑒)(N、e) 。他使用起先与 Alice 约好的编码格式将 M 转换为一个<code>小于</code> 模 <a href="https://www.shangyang.me/2017/05/19/encrypt-rsa-math/#%E6%A8%A1-N">N</a>，且与 N 互质的整数 m；通常，我们传递的是字符串，但是字符可以转换为对应的 ASCII 码值或者 UNICODE 等整数数值；由于转换后的数字必须要小于 N，所以，一般的做法是，将原来的文本切割为很多小份，然后分别加密，将每一段转换为 m 后再传输；</p>
+<p>加密公式，</p>
+<p>𝑐≡𝑚𝑒(mod𝑁)c≡me(modN)</p>
+<p>将 m 转换为加密数值<code>c</code>，然后 Bob 将<code>c</code>传输给 Alice；那么<code>c</code>是如何计算得到的？其实这个求<code>c</code>的过程非常的简单，直接是</p>
+<p>𝑐=𝑚𝑒%𝑁c=me%N</p>
+<p>推导过程，𝑢=𝑚𝑒%𝑁u=me%N，因为 𝑢&lt;𝑁u&lt;N 导出 𝑢=𝑢%𝑁u=u%N 导出 𝑐=𝑢c=u 导出 <strong>余数 u</strong> 既是<code>c</code></p>
+<p><a href="https://l2x.gitbooks.io/understanding-cryptography/docs/chapter-3/rsa.html">https://l2x.gitbooks.io/understanding-cryptography/docs/chapter-3/rsa.html</a></p>
+<h2 id="解密过程">解密过程</h2>
+<p>Alice 拿到 Bob 的加密信息<code>c</code>以后，她使用下面的公式来将<code>c</code>解密得到 m：</p>
+<p>𝑐𝑑≡𝑚(mod𝑁)cd≡m(modN)</p>
+<p>同<a href="https://www.shangyang.me/2017/05/19/encrypt-rsa-math/#%E5%8A%A0%E5%AF%86%E8%BF%87%E7%A8%8B">加密过程</a>求<code>c</code>一样，这里，得出</p>
+<p>𝑚=𝑐𝑑%𝑁m=cd%N</p>
+<p>这里的关键问题是，如何得到的解密方程式 𝑐𝑑≡𝑚(mod𝑁)cd≡m(modN)？</p>
+<h3 id="公式推导">公式推导</h3>
+<p>由加密公式，</p>
+<p>𝑐≡𝑚𝑒(mod𝑁)c≡me(modN)</p>
+<p>通过<a href="https://zh.wikipedia.org/wiki/%E5%90%8C%E9%A4%98">同余</a>的基本运算规则
+<img src="https://www.shangyang.me/2017/05/19/encrypt-rsa-math/tongyu-basic-rule.png" alt="img"></p>
+<p>那么可以得出</p>
+<p>𝑐𝑑≡𝑚𝑒𝑑(mod𝑁)cd≡med(modN)</p>
+<p>下面相关部分摘要自 wikipedia，稍有不同的是，上述过程的原始消息是 m，下面过程的原始消息是 n</p>
+<p><img src="https://www.shangyang.me/2017/05/19/encrypt-rsa-math/decryption-formula-deduce-process-remains.png" alt="img"></p>
+<p>上面推论的重点在于，𝑛(𝑛φ(𝑁))ℎ≡𝑛(1)ℎ(mod𝑁)n(nφ(N))h≡n(1)h(modN) 是怎么导出来的？参考<a href="https://zh.wikipedia.org/wiki/%E6%AC%A7%E6%8B%89%E5%87%BD%E6%95%B0">欧拉定理</a>
+<img src="https://www.shangyang.me/2017/05/19/encrypt-rsa-math/euler-theorem.png" alt="img"></p>
+<p>所以，有 𝑛φ(𝑁)≡1(mod𝑁)nφ(N)≡1(modN)，难道是将 𝑛φ(𝑁)≡1(mod𝑁)nφ(N)≡1(modN) 直接代入 𝑛(𝑛φ(𝑁))ℎn(nφ(N))h，所以得到 𝑛(𝑛φ(𝑁))ℎ≡𝑛(1)ℎ(mod𝑁)n(nφ(N))h≡n(1)h(modN)，除此之外，想不到原因了… 但是在<a href="https://zh.wikipedia.org/wiki/%E5%90%8C%E9%A4%98">同余</a>中没找到这种参数代入法.. 所以会有些怀疑；好吧，姑且给自己有一个悬念吧..</p>
+<p>最终，经过上述的论证，我们得到了解密要用到的公式，</p>
+<p>𝑐𝑑≡𝑚(mod𝑁)cd≡m(modN)</p>
+<p><a href="https://l2x.gitbooks.io/understanding-cryptography/docs/chapter-3/rsa.html">https://l2x.gitbooks.io/understanding-cryptography/docs/chapter-3/rsa.html</a></p>
+<h1 id="例证">例证</h1>
+<p>上面的原理性的东西说了一堆，这里通过一个实际的例子来看看 RSA 是如何做到加密解密的？</p>
+<p>Bob 试图通过 RSA 的加密的方式向 Alice 发送数据，</p>
+<h2 id="生成密钥">生成密钥</h2>
+<p>如下步骤描述了 Alice 如何通过 RSA 算法生成自己的密钥(公钥和公钥)；</p>
+<ol>
+<li>
+<p>模 N，Alice 选择两个质数 5、13，得到</p>
+<p>𝑁=5×13=65N=5×13=65</p>
+<p>备注，这里选择的时候一定要注意，之前就是因为错选了不是质数的 9，导致入坑很久没爬出来；</p>
+</li>
+<li>
+<p>欧拉函数值 r</p>
+<p>𝑟=φ(𝑁)=φ(5)φ(13)=(5−1)(13−1)=48r=φ(N)=φ(5)φ(13)=(5−1)(13−1)=48</p>
+</li>
+<li>
+<p>随机数 e，随机选择 e 且 (1&lt;𝑒&lt;𝑟)(1&lt;e&lt;r)，e 必须与 r 互质，这里，我随机选择一个</p>
+<p>𝑒=5e=5</p>
+</li>
+<li>
+<p>求 e 关于 r 的模反元素 d，有公式 𝑒𝑑≡1(mod𝑟)ed≡1(modr) 等价于求解</p>
+<p>5×𝑑≡1(mod48)5×d≡1(mod48)</p>
+<p>按照</p>
+<p>如何计算得到 d</p>
+<p>中所介绍的扩展欧几里得算法，得到公式</p>
+<p>5×𝑑+48𝑘=15×d+48k=1</p>
+<p>，同样也可以按照公式</p>
+<p>5×𝑑−48𝑘=15×d−48k=1</p>
+<p>来进行求解，两者之间的相互区别在</p>
+<p>如何计算得到 d</p>
+<p>有详细的描述；</p>
+<p>为了计算出 d，我按照求解的公式 5×𝑑−48𝑘=15×d−48k=1 写了一段程序来求解 d，从 k = -20 开始，不断的试探出 d 的取值，</p>
+<pre><code>int k = -20;
+   
+int e = 5;
+   
+int r = 48;
+   
+while( true ){
+      
+   int d_mod = (r*k + 1)%e;
+   
+   if( d_mod == 0 ){
+         
+      int d = ( (r*k + 1)/e );
+         
+      System.out.println(&quot;=====&gt; k=&quot;+k+&quot;; d=&quot; + d );
+                     
+      //break;
+         
+   }
+      
+   //System.out.println(&quot;tried k=&quot;+k);       
+      
+   k ++;
+      
+   if( k &gt; 10 ) break;
+      
+}
+</code></pre><p>求得取值范围如下，</p>
+<pre><code>=====&gt; k=-17; d=-163
+=====&gt; k=-12; d=-115
+=====&gt; k=-7; d=-67
+=====&gt; k=-2; d=-19
+=====&gt; k=3; d=29
+=====&gt; k=8; d=77
+</code></pre><p>这里要求取最小正整数的模反元素，所以取得 d = 29，k = 3；因为这里是按照𝑒𝑑−𝑘𝑟=1ed−kr=1的逻辑进行求解，所以，这里 k 的值为正整数 3，如果是按照扩展欧几里得算法的方式𝑒𝑑+𝑘𝑟=1ed+kr=1求解，那么 k = -3</p>
+</li>
+</ol>
+<p>Ok，至此，重要的 6 个元素已经集合完毕，他们分别是 𝑝=5,𝑞=13,𝑁=65,𝑟=48,𝑒=5,𝑑=29p=5,q=13,N=65,r=48,e=5,d=29</p>
+<p>于是，得到<code>公钥</code>为 65,565,5；得到<code>私钥</code>为 65,2965,29；最后 Alice 通过某种方式将<code>公钥</code>发送给 Bob；</p>
+<h2 id="传输加密信息">传输加密信息</h2>
+<p>Bob 通过 RSA 加密方式向 Alice 发送字符感叹号 !，</p>
+<p>首先，将字符 ! 转换成其对应的 ASCII 码值，对应为 41，记为 𝑚m</p>
+<p>再次，通过<a href="https://www.shangyang.me/2017/05/19/encrypt-rsa-math/#%E5%8A%A0%E5%AF%86%E8%BF%87%E7%A8%8B">加密公式</a> 𝑐=𝑚𝑒%𝑁c=me%N 既 𝑐=415%65=6c=415%65=6，由此得到 m 的加密后的数字为 𝑐=6c=6；注意，过程中使用到了 (N,e)；备注，这里可用编程的方式求解，</p>
+<pre><code>System.out.println( Math.pow(41,5) % 65);
+</code></pre><p>最后，Bob 将加密数字 c = 6 发送给了 Alice；</p>
+<h2 id="解密加密信息">解密加密信息</h2>
+<p>Alice 接收到了 Bob 发送的加密数字 c (6)，之后使用私钥(65, 29)进行解密，</p>
+<p>首先，根据<a href="https://www.shangyang.me/2017/05/19/encrypt-rsa-math/#%E8%A7%A3%E5%AF%86%E8%BF%87%E7%A8%8B">解密公式</a> 𝑚=𝑐𝑑%𝑁m=cd%N 既 𝑚=629%65m=629%65，解出 𝑚=41m=41，正好得到 Bob 未加密之前的字符 ! 的 ASCII 码，因此，这里成功将其解密；备注，这里可以通过编程的方式求解，</p>
+<pre><code>System.out.println( Math.pow(6,29) % 65);
+</code></pre><h1 id="为什么-rsa-很难被破解">为什么 RSA 很难被破解</h1>
+<p>因为要通过密文 c 反推得到明文 m，根据解密方程式 𝑚=𝑐𝑑%𝑁m=cd%N 我们知道，</p>
+<ol>
+<li>在公钥公开的前提下，既是知道 N、e 的前提下，必须要知道 d，才能解密出明文 m；</li>
+<li>而要知道 d，那么就必须对素数模 N 进行<code>因式分解</code>，得到 p 和 q，</li>
+<li>再通过欧拉函数的计算 𝜑(𝑝𝑞)=𝜑(𝑝)𝜑(𝑞)𝜑(pq)=𝜑(p)𝜑(q) 得到 r，</li>
+<li>最后通过 r 和 e，求出 e 于 r 的模反元素的计算才能最终推导出 d；</li>
+</ol>
+<p>而一切的一切的前提都必须对 N 进行因式分解，而如果 N 是一个非常大的素数，因式分解几乎是不可能的；这样，也就保证了 RSA 的加密技术的可靠性；</p>
+<h1 id="使用注意">使用注意</h1>
+<p>可以看到，在加密和解密过程中都会涉及到<code>特大指数级别</code>的运算，所以，运算过程是非常耗费计算机资源和时间的；所以一般的通讯中不直接使用 RSA 来进行加密通讯；而是通过公钥加密一段 DES 密钥来进行通讯，比如 Bob 使用 Alice 的<code>公钥</code>生成一个 DES 对称密钥，然后发送给 Alice，然后 Alice 再使用<code>密钥</code>解密得到 DES 密钥，这样双发最后实际上是通过 DES 密钥在进行通讯；</p>
 ]]></content>
 		</item>
 		
